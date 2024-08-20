@@ -1,6 +1,11 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import createApiInstance from "../../../interceptors/interceptor.js";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const api = createApiInstance();
 
 function Login() {
   const navigate = useNavigate();
@@ -10,11 +15,8 @@ function Login() {
   });
 
   useEffect(() => {
-    fetch("http://localhost:3000/me", {
-      method: "GET",
-      credentials: "include",
-    }).then((response) => {
-      if (response.ok) {
+    api.get("/me").then((response) => {
+      if (response.status === 200) {
         console.log("User is authenticated from Login");
         navigate("/");
       } else {
@@ -30,34 +32,45 @@ function Login() {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, toast) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:3000/login", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-    if (response.ok) {
-      console.log("User logged in successfully");
-      let data = await response.json();
-      console.log("DATA=> ", data);
-      navigate("/");
-    } else {
-      console.error("Error logging in user");
+    try {
+      const response = await api.post("/login", formData);
+      if (response.status === 200) {
+        console.log("User logged in successfully");
+        let data = await response.data;
+        console.log("DATA=> ", data);
+        navigate("/");
+      } else {
+        console.error("Error logging in user", response.statusText);
+        toast.error("Error logging in user");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response.data);
     }
   };
 
   return (
     <section className="bg-gray-100 flex items-center justify-center min-h-screen">
+      <ToastContainer
+        theme="dark"
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover
+      />
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-gray-900 text-center">
           Login
         </h2>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e) => handleSubmit(e, toast)}>
           <div className="mb-4">
             <label
               htmlFor="email"

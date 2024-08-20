@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  avatar: String,
   hobbies: [String],
   createdAt: {
     type: Date,

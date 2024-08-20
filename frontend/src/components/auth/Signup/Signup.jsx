@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
+    avatar: "",
   });
   const navigate = useNavigate();
   useEffect(() => {
@@ -29,7 +32,7 @@ const SignUp = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, toast) => {
     e.preventDefault();
     try {
       const response = await fetch("http://localhost:3000/signup", {
@@ -42,24 +45,38 @@ const SignUp = () => {
       });
 
       if (response.ok) {
-        console.log("User created successfully");
+        toast.success("User created successfully");
       } else {
         let data = await response.json();
         console.error("Error creating user: ", data.message);
+        toast.error(data.message);
       }
     } catch (error) {
       console.error("Error:", error);
+      toast.error("Error creating user");
     }
   };
 
   return (
     <div className="bg-gray-100 flex items-center justify-center min-h-screen">
+      <ToastContainer
+        theme="dark"
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover
+      />
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-gray-900 text-center">
           Sign Up
         </h2>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e) => handleSubmit(e, toast)}>
           <div className="mb-4">
             <label
               htmlFor="name"
