@@ -38,7 +38,7 @@ function Login() {
       const response = await api.post("/login", formData);
       if (response.status === 200) {
         console.log("User logged in successfully");
-        let data = await response.data;
+        let data = response.data;
         console.log("DATA=> ", data);
         navigate("/");
       } else {

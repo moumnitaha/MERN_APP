@@ -13,19 +13,23 @@ exports.upload_avatar = async (req, res) => {
     );
     const imageType = avatar.match(/^data:image\/(png|jpg|jpeg);base64,/)[1];
     const fileName = `${req.user.userId}_${Date.now()}_avatar.${imageType}`;
-    const filePath = path.join(__dirname, "../uploads", fileName);
-    fs.mkdirSync(path.join(__dirname, "../uploads"), { recursive: true }); //check if uploads folder exists or create it
+    const filePath = path.join(__dirname, "../uploads/avatars", fileName);
+    fs.mkdirSync(path.join(__dirname, "../uploads/avatars"), {
+      recursive: true,
+    }); //check if uploads folder exists or create it
     //delete previous avatars
-    fs.readdirSync(path.join(__dirname, "../uploads")).forEach((file) => {
-      if (file.includes(req.user.userId)) {
-        console.log(file);
-        fs.unlinkSync(path.join(__dirname, "../uploads", file)); // delete previous avatar file in uploads folder
+    fs.readdirSync(path.join(__dirname, "../uploads/avatars")).forEach(
+      (file) => {
+        if (file.includes(req.user.userId)) {
+          console.log(file);
+          fs.unlinkSync(path.join(__dirname, "../uploads/avatars", file)); // delete previous avatar file in uploads folder
+        }
       }
-    });
+    );
     fs.writeFileSync(filePath, base64Data, "base64"); //create new avatar file in uploads folder
     await User.findByIdAndUpdate(
       req.user.userId,
-      { avatar: `http://localhost:3000/uploads/${fileName}` },
+      { avatar: `http://localhost:3000/uploads/avatars/${fileName}` },
       { new: true }
     );
     return res

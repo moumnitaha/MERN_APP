@@ -2,21 +2,20 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import createApiInstance from "../../../interceptors/interceptor";
+
+const api = createApiInstance();
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    avatar: "",
   });
   const navigate = useNavigate();
   useEffect(() => {
-    fetch("http://localhost:3000/me", {
-      method: "GET",
-      credentials: "include",
-    }).then((response) => {
-      if (response.ok) {
+    api.get("/me").then((response) => {
+      if (response.status === 200) {
         console.log("User is authenticated from SignUp");
         navigate("/");
       } else {
@@ -35,19 +34,11 @@ const SignUp = () => {
   const handleSubmit = async (e, toast) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3000/signup", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
+      const response = await api.post("http://localhost:3000/signup", formData);
+      if (response.status === 200) {
         toast.success("User created successfully");
       } else {
-        let data = await response.json();
+        let data = response.data;
         console.error("Error creating user: ", data.message);
         toast.error(data.message);
       }

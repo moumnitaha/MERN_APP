@@ -6,13 +6,6 @@ const User = require("../models/user");
 exports.signup = async (req, res) => {
   const { name, email, password } = req.body;
 
-  const emailValidator = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailValidator.test(email)) {
-    console.log(colors.red("Invalid email address"));
-    return res.status(400).send("Invalid email address");
-  } else {
-    console.log(colors.green("Email is valid"));
-  }
   try {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -20,7 +13,7 @@ exports.signup = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      avatar: `http://localhost:3000/uploads/noUser.png`,
+      avatar: `http://localhost:3000/uploads/avatars/noUser.png`,
     });
     await user.save();
     const refreshToken = jwt.sign(
@@ -36,7 +29,7 @@ exports.signup = async (req, res) => {
       httpOnly: true,
       secure: false,
       sameSite: "Strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      //   maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     console.log(colors.green("User created successfully"));
     res.status(201).send("User created successfully");

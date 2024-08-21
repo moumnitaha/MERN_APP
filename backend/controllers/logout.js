@@ -4,13 +4,9 @@ const BlacklistedToken = require("../models/blacklistedTokens");
 
 exports.logout = async (req, res) => {
   try {
-    let valiated = jwt.verify(
-      req.cookies.refreshToken,
-      process.env.REFRESH_TOKEN_SECRET
-    );
     const blacklistedToken = new BlacklistedToken({
       token: req.cookies.accessToken,
-      type: valiated.type,
+      type: "refresh",
     });
     await blacklistedToken.save();
     console.log(colors.green("Token blacklisted successfully"));

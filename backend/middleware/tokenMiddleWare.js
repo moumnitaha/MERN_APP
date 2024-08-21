@@ -19,11 +19,30 @@ const authenticateToken = async (req, res, next) => {
       token: refreshToken,
     });
     if (blacklistedToken) {
+      res.clearCookie("refreshToken");
       console.log(
         colors.red("Already blacklisted token from middleware for:"),
         colors.cyan(requestPath)
       );
       return res.status(403).send("Blacklisted token from middleware");
+    }
+    try {
+      jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    } catch (error) {
+      res.clearCookie("refreshToken");
+      let blackedToken = new BlacklistedToken({
+        token: refreshToken,
+        type: "refresh",
+      });
+      await blackedToken.save();
+      if (error.name === "TokenExpiredError") {
+        console.log(
+          colors.red("Refresh token expired from middleware for:"),
+          colors.cyan(requestPath)
+        );
+        return res.status(401).send("Refresh token expired from middleware");
+      }
+      return res.status(403).send("Invalid refresh token from middleware");
     }
   } catch (err) {
     console.log(
@@ -36,6 +55,13 @@ const authenticateToken = async (req, res, next) => {
   }
   jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) {
+      if (err.name === "TokenExpiredError") {
+        console.log(
+          colors.red("Token expired from middleware for:"),
+          colors.cyan(requestPath)
+        );
+        return res.status(401).send("Token expired from middleware");
+      }
       console.log(
         colors.red("Invalid token from middleware for:"),
         colors.cyan(requestPath)

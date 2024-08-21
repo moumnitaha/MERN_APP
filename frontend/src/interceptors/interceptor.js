@@ -30,7 +30,6 @@ const createApiInstance = () => {
       return Promise.reject(error);
     }
   );
-
   return api;
 };
 

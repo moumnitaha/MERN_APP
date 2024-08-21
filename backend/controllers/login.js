@@ -18,14 +18,14 @@ exports.login = async (req, res) => {
       { userId: user._id, type: "access" },
       process.env.ACCESS_TOKEN_SECRET,
       {
-        expiresIn: "15m",
+        expiresIn: "10m",
       }
     );
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: false,
       sameSite: "Strict",
-      maxAge: 15 * 60 * 1000,
+      //   maxAge: 1 * 60 * 1000,
     });
     let refreshToken = user.refreshToken;
     try {
@@ -45,7 +45,7 @@ exports.login = async (req, res) => {
       httpOnly: true,
       secure: false,
       sameSite: "Strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      //   maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     console.log(colors.green("Login successfuly"));
     res.status(200).send(user);
