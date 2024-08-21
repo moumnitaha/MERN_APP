@@ -28,30 +28,41 @@ function Products() {
       {products?.map((product) => {
         return (
           <div
-            key={product._id}
-            className="m-4 p-4 border border-gray-300 w-1/4"
+            className="max-w-sm rounded overflow-hidden shadow-lg bg-white m-2 w-64"
+            key={product.title}
           >
-            <h2 className="text-2xl font-bold">{product.title}</h2>
-            <div className="flex flex-row">
-              {product?.images.map((image, index) => {
-                return (
-                  <img
-                    src={image}
-                    alt="product"
-                    className="w-1/4 h-1/4 m-auto"
-                    key={index}
-                  />
-                );
-              })}
+            <div className="relative">
+              <img
+                className="w-full h-48 object-cover"
+                src={product.images[0]}
+                alt={product.title}
+              />
+              {product.images.length > 1 && (
+                <div className="absolute bottom-2 right-2 flex space-x-1">
+                  {product.images.slice(1, 4).map((image, index) => (
+                    <img
+                      key={index}
+                      className="w-8 h-8 object-cover rounded-full border-2 border-white"
+                      src={image}
+                      alt={`Product thumbnail ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
-            <p className="text-lg">{product.description}</p>
-            <p className="text-lg">
-              Price: {product.price}
-              {"$"}
-            </p>
-            <h3 className="text-lg font-bold">
-              Category: {product.category.name}
-            </h3>
+            <div className="px-6 py-4">
+              <div className="font-bold text-xl mb-2 text-gray-800">
+                {product.title}
+              </div>
+              <p className="text-gray-700 text-base description-ellipsis">
+                {product.description}
+              </p>
+            </div>
+            <div className="px-6 pt-4 pb-2">
+              <span className="text-gray-800 font-semibold text-lg">
+                ${product.price}
+              </span>
+            </div>
           </div>
         );
       })}

@@ -64,7 +64,7 @@ function NavBar() {
     avatar: "",
   });
   return location.pathname != "/login" && location.pathname != "/signup" ? (
-    <nav className="flex flex-row items-center justify-around w-full bg-stone-600 p-4 h-32">
+    <nav className="flex flex-row items-center justify-around w-full bg-slate-100 p-4 h-32 fixed z-50 text-gray-900">
       <div className="w-24 h-24 rounded-full">
         <img
           src={user.avatar}
@@ -73,13 +73,13 @@ function NavBar() {
         />
       </div>
       <div className="flex flex-col items-start justify-start">
-        <h2 className="text-2xl font-bold mb-1 text-white text-center">
+        <h2 className="text-2xl font-bold mb-1  text-center">
           Welcome {user.name}
         </h2>
-        <p className="text-lg font-medium mb-1 text-white text-center">
+        <p className="text-lg font-medium mb-1  text-center">
           Email: {user.email}
         </p>
-        <p className="text-lg font-medium mb-1 text-white text-center">
+        <p className="text-lg font-medium mb-1  text-center">
           Created At: {new Date(user.createdAt).toLocaleString("en-US")}
         </p>
       </div>

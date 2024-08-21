@@ -15,7 +15,6 @@ const {
   loginValidator,
   signupValidator,
 } = require("../middleware/authMiddleware");
-const User = require("../models/user");
 
 router.post("/login", loginValidator, login.login);
 router.post("/signup", signupValidator, signup.signup);
