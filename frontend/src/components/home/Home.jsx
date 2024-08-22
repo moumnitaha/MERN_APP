@@ -59,7 +59,7 @@ function Home() {
     getUsers(setUsers);
   }, []);
   return (
-    <section className="bg-stone-950 flex flex-col items-center h-[calc(100svh-8rem)] w-svw">
+    <section className="bg-stone-950 flex flex-col items-center h-[calc(100svh-8rem)] w-svw mt-32">
       <div className="m-4 bg-blue-200 p-5 rounded-sm">
         <label
           htmlFor="avatar"

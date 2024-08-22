@@ -5,7 +5,7 @@ const BlacklistedToken = require("../models/blacklistedTokens");
 
 exports.refresh = async (req, res) => {
   try {
-    const refreshToken = req.cookies.refreshToken;
+    const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
     if (!refreshToken) return res.status(401).send("Access denied");
     let blacklistedToken = await BlacklistedToken.findOne({
       token: refreshToken,
@@ -21,7 +21,7 @@ exports.refresh = async (req, res) => {
       { userId: user._id, type: "access" },
       process.env.ACCESS_TOKEN_SECRET,
       {
-        expiresIn: "15m",
+        expiresIn: "10m",
       }
     );
     res.cookie("accessToken", accessToken, {
@@ -30,7 +30,9 @@ exports.refresh = async (req, res) => {
       sameSite: "Strict",
     });
     console.log(colors.green("Token refreshed successfully"));
-    res.status(200).send("Token refreshed successfully");
+    res
+      .status(200)
+      .send({ message: "Token refreshed successfully", token: accessToken });
   } catch (err) {
     res.status(500).send("Error refreshing token");
   }

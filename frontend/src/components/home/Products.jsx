@@ -24,12 +24,12 @@ function Products() {
     getProduct(setProducts);
   }, []);
   return (
-    <section className="flex flex-row flex-wrap justify-center">
+    <section className="flex flex-row flex-wrap justify-center mt-32">
       {products?.map((product) => {
         return (
           <div
             className="max-w-sm rounded overflow-hidden shadow-lg bg-white m-2 w-64"
-            key={product.title}
+            key={product._id}
           >
             <div className="relative">
               <img

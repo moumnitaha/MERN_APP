@@ -64,7 +64,7 @@ function NavBar() {
     avatar: "",
   });
   return location.pathname != "/login" && location.pathname != "/signup" ? (
-    <nav className="flex flex-row items-center justify-around w-full bg-slate-100 p-4 h-32 fixed z-50 text-gray-900">
+    <nav className="flex flex-row items-center justify-around w-full bg-slate-100 p-4 h-32 fixed z-50 text-gray-900 top-0 left-0">
       <div className="w-24 h-24 rounded-full">
         <img
           src={user.avatar}
