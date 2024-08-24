@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import createApiInstance from "../../interceptors/interceptor.js";
 
 import { Link, useLocation, useNavigate } from "react-router-dom";
+
+import { AuthContext } from "../../lib/AuthProvider.jsx";
 
 const api = createApiInstance();
 
@@ -19,52 +21,36 @@ async function refreshToken() {
   }
 }
 
-async function handleLogout(navigate) {
-  try {
-    const response = await api.post("/logout");
-    if (response.status === 200) {
-      console.log("User logged out successfully");
-      navigate("/login");
-    } else {
-      console.error("Error logging out user");
-    }
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
-
-const getData = async (navigate, setUser) => {
-  try {
-    const response = await api.get("/me");
-    if (response.status === 200) {
-      console.log("User is authenticated from Home");
-      setUser(response.data);
-    } else {
-      console.error("User is not authenticated");
-      navigate("/login");
-      return;
-    }
-  } catch (error) {
-    console.error("Error:", error);
-    navigate("/login");
-  }
-};
-
 function NavBar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const {
+    user: me,
+    loading,
+    isAuthenticated,
+    handleLogout,
+  } = useContext(AuthContext);
   useEffect(() => {
-    getData(navigate, setUser);
-    console.log("Location: ", location.pathname);
-  }, [location.pathname]);
+    if (isAuthenticated) {
+      if (["/login", "/signup"].includes(location.pathname)) {
+        navigate("/home");
+      }
+      setUser({ user, ...me });
+    } else {
+      if (!["/login", "/signup", "/"].includes(location.pathname)) {
+        navigate("/login");
+      }
+    }
+  }, [isAuthenticated, location.pathname, me]);
   const [user, setUser] = useState({
     name: "",
     email: "",
     createdAt: "",
     avatar: "",
+    ...me,
   });
-  return location.pathname != "/login" && location.pathname != "/signup" ? (
-    <nav className="flex flex-row items-center justify-around w-full bg-slate-100 p-4 h-32 fixed z-50 text-gray-900 top-0 left-0">
+  return isAuthenticated && location.pathname !== "/" ? (
+    <nav className="flex flex-col items-center justify-around w-60 bg-slate-100 p-4 h-svh fixed z-40 text-gray-900 top-0 left-0">
       <div className="w-24 h-24 rounded-full">
         <img
           src={user.avatar}
@@ -72,7 +58,7 @@ function NavBar() {
           className="w-24 h-24 rounded-full"
         />
       </div>
-      <div className="flex flex-col items-start justify-start">
+      <div className="flex flex-col items-center justify-start">
         <h2 className="text-2xl font-bold mb-1  text-center">
           Welcome {user.name}
         </h2>
@@ -85,15 +71,21 @@ function NavBar() {
       </div>
       <Link
         className="w-48 p-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 text-center"
+        to="/"
+      >
+        Home
+      </Link>
+      <Link
+        className="w-48 p-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 text-center"
         to="/products"
       >
         Products
       </Link>
       <Link
         className="w-48 p-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 text-center"
-        to="/login"
+        to="/addProduct"
       >
-        Login
+        Add Product
       </Link>
       <Link
         className="w-48 p-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 text-center"
@@ -108,7 +100,7 @@ function NavBar() {
         Refresh Token
       </button>
       <button
-        onClick={() => handleLogout(navigate)}
+        onClick={handleLogout}
         className="w-48 p-3 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600"
       >
         Logout

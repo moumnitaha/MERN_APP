@@ -1,24 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import createApiInstance from "../../interceptors/interceptor.js";
+import { AuthContext } from "../../lib/AuthProvider.jsx";
+import { ToastContainer, toast } from "react-toastify";
 
 const api = createApiInstance();
-
-const handleImageChange = async (e, setUser, user) => {
-  const file = e.target.files[0];
-  const reader = new FileReader();
-  reader.readAsDataURL(file);
-  reader.onloadend = async () => {
-    const response = await api.post("http://localhost:3000/upload_avatar", {
-      avatar: reader.result,
-    });
-    if (response.status === 200) {
-      console.log("Avatar uploaded successfully");
-      let data = response.data;
-      setUser({ ...user, avatar: data.newAvatar });
-    }
-  };
-};
 
 const getUsers = async (setUsers) => {
   try {
@@ -55,11 +41,25 @@ function Home() {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
 
+  const { handleImageChange } = useContext(AuthContext);
+
   useEffect(() => {
     getUsers(setUsers);
   }, []);
   return (
-    <section className="bg-stone-950 flex flex-col items-center h-[calc(100svh-8rem)] w-svw mt-32">
+    <section className="w-svw h-svh flex items-start justify-around bg-[#f9f9f9] text-white font-extrabold pl-60">
+      <ToastContainer
+        theme="dark"
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover
+      />
       <div className="m-4 bg-blue-200 p-5 rounded-sm">
         <label
           htmlFor="avatar"
@@ -73,7 +73,7 @@ function Home() {
           id="avatar"
           name="avatar"
           accept="image/png, image/jpeg, image/jpg"
-          onChange={(e) => handleImageChange(e, setUser, user)}
+          onChange={(e) => handleImageChange(e, toast)}
           className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
       </div>

@@ -7,7 +7,8 @@ exports.updateProduct = async (req, res) => {
     if (updated.n === 0) {
       return res.status(404).send({ error: "Product not found" });
     }
-    res.send({ message: "Product updated successfully" });
+    const product = await Product.findOne({ _id: prd._id });
+    res.send({ message: "Product updated successfully", product });
   } catch (error) {
     console.log(error);
     res.status(400).send({ error: "Error updating product" });

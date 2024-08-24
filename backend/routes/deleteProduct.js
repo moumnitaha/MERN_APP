@@ -1,6 +1,9 @@
 const Product = require("../models/Product");
 
 exports.deleteProduct = async (req, res) => {
+  if (!req.body.product) {
+    return res.status(400).send({ error: "Product data is required" });
+  }
   let prd = req.body.product;
   try {
     if (!prd._id) {

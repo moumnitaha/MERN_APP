@@ -38,4 +38,20 @@ const productSchema = new mongoose.Schema({
   },
 });
 
+//edit save() method to update updatedAt
+productSchema.pre("save", function (next) {
+  this.updatedAt = new Date();
+  next();
+});
+
+productSchema.pre("findOneAndUpdate", function (next) {
+  this._update.updatedAt = new Date();
+  next();
+});
+
+productSchema.pre("updateOne", function (next) {
+  this._update.updatedAt = new Date();
+  next();
+});
+
 module.exports = mongoose.model("Product", productSchema);

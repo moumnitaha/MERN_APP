@@ -8,7 +8,7 @@ const refreshToken = async () => {
       { withCredentials: true }
     );
   } catch (error) {
-    console.log(error);
+    console.error(error?.response?.data);
   }
 };
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import createApiInstance from "../../interceptors/interceptor.js";
+import { Link } from "react-router-dom";
 
 const api = createApiInstance();
 
@@ -8,13 +9,13 @@ const getProduct = async (setProducts) => {
     const response = await api.get("/products");
     if (response.status === 200) {
       console.log("Products retrieved successfully");
-      console.log(response.data);
+      console.log(response.data.length);
       setProducts(response.data);
     } else {
       console.error("Error retrieving products");
     }
   } catch (error) {
-    console.log(firstname, error);
+    console.log(error);
   }
 };
 
@@ -24,7 +25,7 @@ function Products() {
     getProduct(setProducts);
   }, []);
   return (
-    <section className="flex flex-row flex-wrap justify-center mt-32">
+    <section className="flex flex-row flex-wrap justify-start pl-60 bg-[#f9f9f9]">
       {products?.map((product) => {
         return (
           <div
@@ -50,18 +51,23 @@ function Products() {
                 </div>
               )}
             </div>
-            <div className="px-6 py-4">
-              <div className="font-bold text-xl mb-2 text-gray-800">
-                {product.title}
+            <div className="flex flex-col justify-between min-h-64">
+              <div className="px-6 py-4">
+                <Link
+                  className="font-bold text-xl mb-2 text-gray-800"
+                  to={`/product/${product._id}`}
+                >
+                  {product.title}
+                </Link>
+                <p className="text-gray-700 text-base description-ellipsis">
+                  {product.description}
+                </p>
               </div>
-              <p className="text-gray-700 text-base description-ellipsis">
-                {product.description}
-              </p>
-            </div>
-            <div className="px-6 pt-4 pb-2">
-              <span className="text-gray-800 font-semibold text-lg">
-                ${product.price}
-              </span>
+              <div className="px-6 pt-4 pb-2 ">
+                <span className="text-gray-800 font-semibold text-lg">
+                  ${product.price}
+                </span>
+              </div>
             </div>
           </div>
         );

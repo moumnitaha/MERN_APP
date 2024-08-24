@@ -1,54 +1,32 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import createApiInstance from "../../../interceptors/interceptor.js";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
-const api = createApiInstance();
+import { AuthContext } from "../../../lib/AuthProvider.jsx";
 
 function Login() {
+  const { isAuthenticated, loading, handleLogin } = useContext(AuthContext);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-  useEffect(() => {
-    api.get("/me").then((response) => {
-      if (response.status === 200) {
-        console.log("User is authenticated from Login");
-        navigate("/");
-      } else {
-        console.error("User is not authenticated");
-      }
-    });
-  }, []);
+  //   useEffect(() => {
+  //     console.log("Loading ========> ", loading);
+  //     if (isAuthenticated) {
+  //       console.log("User is authenticated from Login");
+  //       navigate("/home");
+  //     } else {
+  //       console.log("User is not authenticated");
+  //     }
+  //   }, [loading]);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.id]: e.target.value,
     });
-  };
-
-  const handleSubmit = async (e, toast) => {
-    e.preventDefault();
-    try {
-      const response = await api.post("/login", formData);
-      if (response.status === 200) {
-        console.log("User logged in successfully");
-        let data = response.data;
-        console.log("DATA=> ", data);
-        navigate("/");
-      } else {
-        console.error("Error logging in user", response.statusText);
-        toast.error("Error logging in user");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      toast.error(error.response.data);
-    }
   };
 
   return (
@@ -69,8 +47,7 @@ function Login() {
         <h2 className="text-2xl font-bold mb-6 text-gray-900 text-center">
           Login
         </h2>
-
-        <form onSubmit={(e) => handleSubmit(e, toast)}>
+        <form onSubmit={(e) => handleLogin(e, formData, toast)}>
           <div className="mb-4">
             <label
               htmlFor="email"

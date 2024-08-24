@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import createApiInstance from "../../../interceptors/interceptor";
+import { AuthContext } from "../../../lib/AuthProvider";
 
 const api = createApiInstance();
 
 const SignUp = () => {
+  const { isAuthenticated } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -14,14 +16,12 @@ const SignUp = () => {
   });
   const navigate = useNavigate();
   useEffect(() => {
-    api.get("/me").then((response) => {
-      if (response.status === 200) {
-        console.log("User is authenticated from SignUp");
-        navigate("/");
-      } else {
-        console.error("User is not authenticated");
-      }
-    });
+    if (isAuthenticated) {
+      console.log("User is authenticated from SignUp");
+      navigate("/home");
+    } else {
+      console.error("User is not authenticated");
+    }
   }, []);
 
   const handleChange = (e) => {
@@ -66,7 +66,6 @@ const SignUp = () => {
         <h2 className="text-2xl font-bold mb-6 text-gray-900 text-center">
           Sign Up
         </h2>
-
         <form onSubmit={(e) => handleSubmit(e, toast)}>
           <div className="mb-4">
             <label

@@ -4,7 +4,17 @@ const products = async (req, res) => {
   console.log("products Query => ", req.query);
   try {
     let mainQuery = {};
-    let { limit, search, min, max, category, page, sort = 1 } = req.query;
+    let { limit, search, min, max, category, page, sort = 1, id } = req.query;
+    if (id) {
+      if (id.length !== 24) {
+        return res.status(400).send({ error: "Invalid product id" });
+      }
+      const product = await Product.findById(id);
+      if (!product) {
+        return res.status(404).send({ error: "Product not found" });
+      }
+      return res.send(product);
+    }
     if (
       parseInt(min) < 0 ||
       parseInt(max) < 0 ||
@@ -12,12 +22,10 @@ const products = async (req, res) => {
       (min && isNaN(min)) ||
       (max && isNaN(max))
     ) {
-      return res
-        .status(400)
-        .send({
-          error:
-            "Invalid price range, min should be less than max, and both should be positive numbers",
-        });
+      return res.status(400).send({
+        error:
+          "Invalid price range, min should be less than max, and both should be positive numbers",
+      });
     }
     if (page < 1 || (page && isNaN(page))) {
       return res
@@ -35,6 +43,12 @@ const products = async (req, res) => {
         .send({ error: "Invalid sort value, should be 1 or -1" });
     }
     if (search) {
+      //check if search has invalid characters
+      const invalidCharsPattern = /[$\\\[\]{}|;:'"<>`]/;
+      if (invalidCharsPattern.test(search)) {
+        console.log("Invalid search query");
+        return res.status(400).send({ error: "Invalid search query" });
+      }
       if (search.includes(",")) search = search.split(",").filter(Boolean);
       if (typeof search === "string") {
         mainQuery.$or = [
@@ -61,6 +75,11 @@ const products = async (req, res) => {
     if (min) mainQuery.price = { $gte: parseInt(min) };
     if (max) mainQuery.price = { $lte: parseInt(max) };
     if (category) {
+      const invalidCharsPattern = /[$\\\[\]{}|;:'"<>`]/;
+      if (invalidCharsPattern.test(category)) {
+        console.log("Invalid search query");
+        return res.status(400).send({ error: "Invalid category query" });
+      }
       if (category.includes(","))
         category = category.split(",").filter(Boolean);
 

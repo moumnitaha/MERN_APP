@@ -3,9 +3,9 @@ const Joi = require("joi");
 const productValidator = (req, res, next) => {
   const addProductSchema = Joi.object({
     _id: Joi.string().length(24).hex(),
-    title: Joi.string().min(3).max(30).required(),
-    description: Joi.string().min(4).max(100).required(),
-    price: Joi.number().min(1).required(),
+    title: Joi.string().min(3).max(40).required(),
+    description: Joi.string().min(100).max(500).required(),
+    price: Joi.number().min(1).max(100_000).required(),
     images: Joi.array().items(Joi.string()),
     category: Joi.object({
       name: Joi.string()
