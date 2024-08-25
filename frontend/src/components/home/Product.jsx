@@ -182,7 +182,7 @@ function Product() {
           </div>
           <div className="flex-1">
             <h2 className="text-3xl text-bold mb-4">{product.title}</h2>
-            <p className="text-gray-700 text-sm mb-4">{product.description}</p>
+            <p className="text-gray-700 text-lg mb-4">{product.description}</p>
             <p className="text-xl font-semibold mb-4">
               {product.price}
               {"$"}
@@ -264,7 +264,7 @@ function Product() {
                       <textarea
                         name="description"
                         type="text-area"
-                        className="p-2 m-6 border-2 border-gray-300 rounded-lg min-h-32"
+                        className="p-2 m-6 border-2 border-gray-300 rounded-lg min-h-20"
                         value={formData.description}
                         onChange={handleChange}
                       />
@@ -334,7 +334,7 @@ function Product() {
                     </label>
                     {/*body*/}
                     <div className="flex flex-col p-6 w-[calc(50svw)]">
-                      <label className="text-lg font-semibold px-2">
+                      <label className="text-lg font-light px-2">
                         Are you sure you want to delete this product?
                       </label>
                       {/*footer*/}

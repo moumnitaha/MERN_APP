@@ -17,6 +17,11 @@ exports.refresh = async (req, res) => {
     const verified = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
     const user = await User.findById(verified.userId);
     if (!user) return res.status(404).send("User not found");
+    if (!user.isVerified) {
+      return res
+        .status(400)
+        .send("Please verify your email first before logging in");
+    }
     accessToken = jwt.sign(
       { userId: user._id, type: "access" },
       process.env.ACCESS_TOKEN_SECRET,

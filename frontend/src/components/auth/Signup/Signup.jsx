@@ -14,15 +14,15 @@ const SignUp = () => {
     email: "",
     password: "",
   });
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (isAuthenticated) {
-      console.log("User is authenticated from SignUp");
-      navigate("/home");
-    } else {
-      console.error("User is not authenticated");
-    }
-  }, []);
+  //   const navigate = useNavigate();
+  //   useEffect(() => {
+  //     if (isAuthenticated) {
+  //       console.log("User is authenticated from SignUp");
+  //       navigate("/home");
+  //     } else {
+  //       console.error("User is not authenticated");
+  //     }
+  //   }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -35,16 +35,16 @@ const SignUp = () => {
     e.preventDefault();
     try {
       const response = await api.post("http://localhost:3000/signup", formData);
-      if (response.status === 200) {
+      if (response.status === 201) {
         toast.success("User created successfully");
       } else {
         let data = response.data;
-        console.error("Error creating user: ", data.message);
+        console.error("Error creating user: ", response.status, data.message);
         toast.error(data.message);
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error("Error creating user");
+      toast.error(error.response.data);
     }
   };
 

@@ -28,7 +28,8 @@ function Products() {
     <section className="flex flex-row flex-wrap justify-start pl-60 bg-[#f9f9f9]">
       {products?.map((product) => {
         return (
-          <div
+          <Link
+            to={`/product/${product._id}`}
             className="max-w-sm rounded overflow-hidden shadow-lg bg-white m-2 w-64"
             key={product._id}
           >
@@ -53,12 +54,9 @@ function Products() {
             </div>
             <div className="flex flex-col justify-between min-h-64">
               <div className="px-6 py-4">
-                <Link
-                  className="font-bold text-xl mb-2 text-gray-800"
-                  to={`/product/${product._id}`}
-                >
+                <div className="font-bold text-xl mb-2 text-gray-800">
                   {product.title}
-                </Link>
+                </div>
                 <p className="text-gray-700 text-base description-ellipsis">
                   {product.description}
                 </p>
@@ -69,7 +67,7 @@ function Products() {
                 </span>
               </div>
             </div>
-          </div>
+          </Link>
         );
       })}
     </section>

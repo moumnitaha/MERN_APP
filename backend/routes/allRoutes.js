@@ -3,6 +3,7 @@ const router = express.Router();
 const { login } = require("../controllers/login.js");
 const { signup } = require("../controllers/signup.js");
 const { logout } = require("../controllers/logout.js");
+const { verify } = require("../controllers/verifyEmail.js");
 const { refresh } = require("./refresh");
 const { friendship } = require("../controllers/friendship.js");
 const { upload_avatar } = require("./uploadAvatar");
@@ -23,6 +24,7 @@ const { productValidator } = require("../middleware/productMiddleware.js");
 
 router.post("/login", loginValidator, login);
 router.post("/signup", signupValidator, signup);
+router.get("/verify", verify);
 router.post("/refresh", refresh);
 router.post("/logout", logout);
 router.post("/upload_avatar", authenticateToken, upload_avatar);

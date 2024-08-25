@@ -8,6 +8,10 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
   avatar: String,
   hobbies: [String],
   createdAt: {
@@ -29,6 +33,9 @@ const userSchema = new mongoose.Schema({
     },
   ],
   refreshToken: {
+    type: String,
+  },
+  verificationToken: {
     type: String,
   },
 });

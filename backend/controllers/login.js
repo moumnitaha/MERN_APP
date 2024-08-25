@@ -14,6 +14,11 @@ exports.login = async (req, res) => {
     if (!isMatch) {
       return res.status(400).send("Invalid credentials");
     }
+    if (!user.isVerified) {
+      return res
+        .status(400)
+        .send("Please verify your email first before logging in");
+    }
     const accessToken = jwt.sign(
       { userId: user._id, type: "access" },
       process.env.ACCESS_TOKEN_SECRET,
