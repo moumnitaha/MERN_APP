@@ -21,7 +21,9 @@ const {
 } = require("../middleware/authMiddleware");
 
 const { productValidator } = require("../middleware/productMiddleware.js");
-
+router.get("/", (req, res) => {
+  res.status(200).send({ message: "Welcome to the backend" });
+});
 router.post("/login", loginValidator, login);
 router.post("/signup", signupValidator, signup);
 router.get("/verify", verify);

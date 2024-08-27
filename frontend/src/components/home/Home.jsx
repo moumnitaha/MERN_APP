@@ -47,37 +47,8 @@ function Home() {
     getUsers(setUsers);
   }, []);
   return (
-    <section className="w-svw h-svh flex items-start justify-around bg-[#f9f9f9] text-white font-extrabold pl-60">
-      <ToastContainer
-        theme="dark"
-        position="top-right"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss={false}
-        draggable
-        pauseOnHover
-      />
-      <div className="m-4 bg-blue-200 p-5 rounded-sm">
-        <label
-          htmlFor="avatar"
-          className="block text-gray-700 font-medium mb-2"
-        >
-          Avatar
-        </label>
-        <input
-          required
-          type="file"
-          id="avatar"
-          name="avatar"
-          accept="image/png, image/jpeg, image/jpg"
-          onChange={(e) => handleImageChange(e, toast)}
-          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        />
-      </div>
-      <div className="flex flex-row items-center justify-around p-2 m-2 rounded-lg w-svw">
+    <section className="w-svw h-svh flex flex-col items-start justify-start bg-[#f9f9f9] text-white font-extrabold pl-60">
+      <div className="flex flex-row items-center justify-around p-2 m-2 rounded-lg">
         {users?.map((user) => (
           <div
             key={user._id}

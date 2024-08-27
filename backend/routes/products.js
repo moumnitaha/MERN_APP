@@ -1,4 +1,9 @@
 const Product = require("../models/Product");
+const fs = require("fs");
+const request = require("request");
+const path = require("path");
+const colors = require("colors");
+
 const products = async (req, res) => {
   console.log("products Method => ", req.method);
   console.log("products Query => ", req.query);
@@ -107,6 +112,44 @@ const products = async (req, res) => {
         createdAt: 1,
         updatedAt: 1,
       });
+
+    // const ensureDirectoryExistence = (dirPath) => {
+    //   if (fs.existsSync(dirPath)) return;
+    //   ensureDirectoryExistence(path.dirname(dirPath));
+    //   fs.mkdirSync(dirPath);
+    // };
+
+    //download products images from url to local folder by product title
+
+    // for (let product of products) {
+    //   let index = 0;
+    //   for (let image of product.images) {
+    //     const url = image;
+    //     const imgPath = path.join(
+    //       __dirname,
+    //       `../uploads/products/${product._id}`
+    //     );
+    //     ensureDirectoryExistence(imgPath);
+    //     request(url).pipe(
+    //       fs.createWriteStream(`${imgPath}/${product._id}_${index}.jpg`)
+    //     );
+    //     product.images[
+    //       index
+    //     ] = `http://localhost:3000/uploads/products/${product._id}/${product._id}_${index}.jpg`;
+    //     await product.save();
+    //     index++;
+    //   }
+    // }
+    for (let product of products) {
+      if (
+        !product?.category?.image.includes(
+          "http://localhost:3000/uploads/categories/"
+        )
+      ) {
+        product.category.image = `http://localhost:3000/uploads/categories/${product.category.name}/${product.category.name}.jpg`;
+        await product.save();
+      }
+    }
     res.send(products);
   } catch (error) {
     console.log(error);
