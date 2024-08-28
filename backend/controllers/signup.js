@@ -5,7 +5,7 @@ const User = require("../models/user");
 const { sendVerificationEmail } = require("./sendVerificationEmail.js");
 
 exports.signup = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
   try {
     const euser = await User.findOne({ email });
     if (euser) {
@@ -14,7 +14,8 @@ exports.signup = async (req, res) => {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     const user = new User({
-      name,
+      firstName,
+      lastName,
       email,
       password: hashedPassword,
       avatar: `http://localhost:3000/uploads/avatars/noUser.png`,

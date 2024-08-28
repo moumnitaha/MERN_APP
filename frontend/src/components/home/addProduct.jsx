@@ -13,7 +13,10 @@ function addProduct() {
     title: "",
     description: "",
     price: 0,
-    images: "",
+    image1: "",
+    image2: "",
+    image3: "",
+    image4: "",
     category: "",
   });
 
@@ -28,7 +31,12 @@ function addProduct() {
         title: formData.title,
         description: formData.description,
         price: formData.price,
-        images: [formData.images],
+        images: [
+          formData.image1,
+          formData.image2,
+          formData.image3,
+          formData.image4,
+        ],
         category: {
           name: formData.category,
         },
@@ -54,18 +62,27 @@ function addProduct() {
     // setShowModal(false);
   };
 
-  const handleImage = (e) => {
+  const handleImage = (e, index) => {
     const file = e.target.files[0];
     const reader = new FileReader();
     if (!file) return;
     reader.readAsDataURL(file);
     reader.onloadend = () => {
-      setFormData({ ...formData, images: reader.result });
+      if (index === 1) {
+        setFormData({ ...formData, image1: reader.result });
+      } else if (index === 2) {
+        setFormData({ ...formData, image2: reader.result });
+      } else if (index === 3) {
+        setFormData({ ...formData, image3: reader.result });
+      } else if (index === 4) {
+        setFormData({ ...formData, image4: reader.result });
+      }
+      console.log("Image uploaded successfully to: ", index);
     };
   };
 
   return (
-    <section className="flex flex-col items-start justify-center max-w-svw min-h-svh h-fit pl-60">
+    <section className="flex flex-col items-start justify-start w-fit max-w-svw min-h-svh h-fit pl-60">
       <ToastContainer
         theme="dark"
         position="top-right"
@@ -78,7 +95,7 @@ function addProduct() {
         draggable
         pauseOnHover
       />
-      <span className="text-2xl font-bold text-gray-800 m-4">
+      <span className="text-2xl font-bold text-gray-800 m-4 font-poppins">
         <PlusCircleIcon className="h-8 w-8 fill-current text-blue-500 inline-block mr-4" />
         Add Product
       </span>
@@ -138,44 +155,65 @@ function addProduct() {
           className="p-2 m-6 border-2 border-gray-300 rounded-lg"
           onChange={handleImage}
         /> */}
-        <label
-          htmlFor="upload"
-          className="flex flex-col items-center justify-center gap-2 cursor-pointer w-56 h-56 aspect-square m-2 relative p-5 border-2 border-dashed border-gray-300 rounded-md"
-        >
-          {formData.images ? (
-            <img
-              src={formData.images}
-              alt="product"
-              className="w-48 h-48 rounded-lg object-conatin aspect-square"
-            />
-          ) : (
-            <>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-16 w-16 fill-white stroke-blue-500"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+        <div className="flex flex-row items-center justify-start gap-2 h-56 mb-5">
+          {[1, 2, 3, 4].map((item, index) => {
+            return (
+              <div key={index} className="w-1/4 p-1">
+                <label
+                  htmlFor={`image${item}`}
+                  className="flex flex-col items-center justify-center gap-2 cursor-pointer max-w-56 max-h-56 w-full aspect-square relative p-4 border-2 border-dashed border-gray-300 rounded-md"
+                >
+                  {[
+                    formData.image1,
+                    formData.image2,
+                    formData.image3,
+                    formData.image4,
+                  ][index] ? (
+                    <img
+                      src={
+                        [
+                          formData.image1,
+                          formData.image2,
+                          formData.image3,
+                          formData.image4,
+                        ][index]
+                      }
+                      alt="product"
+                      className="w-full h-full rounded-lg object-conatin aspect-square"
+                    />
+                  ) : (
+                    <>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-16 w-16 fill-white stroke-blue-500"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        />
+                      </svg>
+                      <span className="text-gray-600 font-medium">
+                        Upload image
+                      </span>
+                    </>
+                  )}
+                </label>
+                <input
+                  id={`image${item}`}
+                  name={`image${item}`}
+                  type="file"
+                  accept="image/png, image/jpeg, image/jpg"
+                  className="hidden"
+                  onChange={(e) => handleImage(e, item)}
                 />
-              </svg>
-              <span className="text-gray-600 font-medium">Upload image</span>
-            </>
-          )}
-        </label>
-        <input
-          id="upload"
-          name="images"
-          type="file"
-          accept="image/png, image/jpeg, image/jpg"
-          className="hidden"
-          onChange={handleImage}
-          onAbort={() => console.log("aborted")}
-        />
+              </div>
+            );
+          })}
+        </div>
         {/*footer*/}
         <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
           <button

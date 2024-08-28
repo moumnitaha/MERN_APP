@@ -10,7 +10,8 @@ const api = createApiInstance();
 const SignUp = () => {
   const { isAuthenticated } = useContext(AuthContext);
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
   });
@@ -67,22 +68,41 @@ const SignUp = () => {
           Sign Up
         </h2>
         <form onSubmit={(e) => handleSubmit(e, toast)}>
-          <div className="mb-4">
-            <label
-              htmlFor="name"
-              className="block text-gray-700 font-medium mb-2"
-            >
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Your Name"
-              required
-            />
+          <div className="mb-4 flex flex-row">
+            <div className="flex flex-col">
+              <label
+                htmlFor="name"
+                className="block text-gray-700 font-medium mb-2"
+              >
+                First Name
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent mr-1"
+                placeholder="Your First Name"
+                required
+              />
+            </div>
+            <div className="flex flex-col">
+              <label
+                htmlFor="name"
+                className="block text-gray-700 font-medium mb-2"
+              >
+                Last Name
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ml-1"
+                placeholder="Your Last Name"
+                required
+              />
+            </div>
           </div>
 
           <div className="mb-4">

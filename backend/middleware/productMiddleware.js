@@ -6,7 +6,7 @@ const productValidator = (req, res, next) => {
     title: Joi.string().min(3).max(40).required(),
     description: Joi.string().min(100).max(500).required(),
     price: Joi.number().min(1).max(100_000).required(),
-    images: Joi.array().items(Joi.string()),
+    images: Joi.array().items(Joi.string().allow("")),
     category: Joi.object({
       name: Joi.string()
         .valid("Clothes", "Electronics", "Furniture", "Shoes", "Miscellaneous")

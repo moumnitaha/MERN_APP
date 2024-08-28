@@ -20,6 +20,21 @@ exports.deleteProduct = async (req, res) => {
         console.log("Image deleted successfully");
         const product = await Product.findOne({ _id: prd._id });
         product.images.splice(imgIndex, 1);
+        let files = fs.readdirSync(productPath);
+        files.forEach((file, index) => {
+          let fileExt = file.match(/^.*\.(png|jpg|jpeg)$/)[1];
+          fs.renameSync(
+            path.join(productPath, file),
+            path.join(productPath, `${prd._id}_${index}.${fileExt}`)
+          );
+        });
+        files = fs.readdirSync(productPath);
+        files.forEach((file, index) => {
+          let fileExt = file.match(/^.*\.(png|jpg|jpeg)$/)[1];
+          product.images[
+            index
+          ] = `http://localhost:3000/uploads/products/${prd._id}/${prd._id}_${index}.${fileExt}`;
+        });
         await product.save();
         return res.status(200).json({ message: "Image deleted successfully" });
       } catch (error) {

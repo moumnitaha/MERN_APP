@@ -4,6 +4,8 @@ const { login } = require("../controllers/login.js");
 const { signup } = require("../controllers/signup.js");
 const { logout } = require("../controllers/logout.js");
 const { verify } = require("../controllers/verifyEmail.js");
+const { updateInfos } = require("./updateInfos.js");
+const { changePass } = require("./changePass.js");
 const { refresh } = require("./refresh");
 const { friendship } = require("../controllers/friendship.js");
 const { upload_avatar } = require("./uploadAvatar");
@@ -18,6 +20,8 @@ const path = require("path");
 const {
   loginValidator,
   signupValidator,
+  updateInfosValidator,
+  changePassValidator,
 } = require("../middleware/authMiddleware");
 
 const { productValidator } = require("../middleware/productMiddleware.js");
@@ -35,6 +39,13 @@ router.post("/addFriend", authenticateToken, friendship);
 router.get("/users", authenticateToken, users);
 router.get("/products", authenticateToken, products);
 router.post("/addProduct", authenticateToken, productValidator, addProduct);
+router.put("/changePass", authenticateToken, changePassValidator, changePass);
+router.put(
+  "/updateInfos",
+  authenticateToken,
+  updateInfosValidator,
+  updateInfos
+);
 router.delete(
   "/deleteProduct",
   authenticateToken,

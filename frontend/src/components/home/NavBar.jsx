@@ -63,7 +63,7 @@ function NavBar() {
         />
         {/* <div className="flex flex-col items-start font-poppins"> */}
         <h2 className="text-xl font-bold text-center text-gray-800">
-          Welcome {user.name}
+          Welcome {user.firstName}
         </h2>
         {/* <span className="text-sm font-medium text-center text-gray-400">
             {user.email}
@@ -129,8 +129,8 @@ function NavBar() {
           to="/signup"
         >
           Signup
-        </Link>
-        <button
+        </Link> */}
+        {/* <button
           className="w-48 p-3 bg-blue-500 text-white rounded-md font-medium hover:bg-blue-600 m-1"
           onClick={refreshToken}
         >

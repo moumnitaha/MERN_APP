@@ -11,6 +11,7 @@ exports.updateProduct = async (req, res) => {
   let index = fs.readdirSync(productPath).length;
   if (index >= 4 && prd.images.length !== index)
     return res.status(400).send({ error: "Maximum images reached" });
+  console.log("LENGTHS ===========> ", index, prd.images.length);
   if (index === prd.images.length - 1) {
     let imgExt = prd.images[index].match(
       /^data:image\/(png|jpg|jpeg);base64,/

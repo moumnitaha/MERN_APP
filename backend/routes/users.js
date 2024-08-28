@@ -7,7 +7,8 @@ exports.users = async (req, res) => {
   const newUsers = users.map((user) => {
     return {
       _id: user._id,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       avatar: user.avatar,
       createdAt: user.createdAt,

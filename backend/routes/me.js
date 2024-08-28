@@ -9,7 +9,8 @@ exports.me = async (req, res) => {
     }
     const newUser = {
       _id: user._id,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       avatar: user.avatar,
       hobbies: user.hobbies,

@@ -8,6 +8,7 @@ exports.addProduct = async (req, res) => {
     if (prd._id) {
       delete prd._id;
     }
+    prd.images = prd.images.filter((img) => img);
     const product = new Product(prd);
     const productPath = path.join(
       __dirname,
@@ -16,17 +17,21 @@ exports.addProduct = async (req, res) => {
     if (!fs.existsSync(productPath)) {
       fs.mkdirSync(productPath, { recursive: true });
     }
-    let imgExt = prd.images[0].match(/^data:image\/(png|jpg|jpeg);base64,/)[1];
-    let imgPath = path.join(productPath, `${product._id}_${0}.${imgExt}`);
-    fs.writeFileSync(
-      imgPath,
-      prd.images[0].replace(/^data:image\/(png|jpg|jpeg);base64,/, ""),
-      "base64"
-    );
-    product.category.image = `http://localhost:3000/uploads/categories/${prd.category.name}/${prd.category.name}.jpg`;
-    product.images[0] = `http://localhost:3000/uploads/products/${
-      product._id
-    }/${product._id}_${0}.${imgExt}`;
+    for (let i = 0; i < prd.images.length; i++) {
+      let imgExt = prd.images[i].match(
+        /^data:image\/(png|jpg|jpeg);base64,/
+      )[1];
+      let imgPath = path.join(productPath, `${product._id}_${i}.${imgExt}`);
+      fs.writeFileSync(
+        imgPath,
+        prd.images[i].replace(/^data:image\/(png|jpg|jpeg);base64,/, ""),
+        "base64"
+      );
+      product.category.image = `http://localhost:3000/uploads/categories/${prd.category.name}/${prd.category.name}.jpg`;
+      product.images[
+        i
+      ] = `http://localhost:3000/uploads/products/${product._id}/${product._id}_${i}.${imgExt}`;
+    }
     await product.save();
     res.send({ message: "Product added successfully", id: product._id });
   } catch (error) {

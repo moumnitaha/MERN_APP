@@ -9,7 +9,8 @@ export const AuthContext = createContext(null);
 
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     createdAt: "",
     avatar: "",
@@ -17,26 +18,36 @@ export default function AuthProvider({ children }) {
   const [loading, setLoding] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const authMount = async () => {
+      setLoding(true);
       try {
         const response = await api("/me");
-        setLoding(true);
         if (response.status === 200) {
           console.log("User Auth successfully!");
           setUser(response.data);
           setIsAuthenticated(true);
           setLoding(false);
+          //   if (["/login", "/signup"].includes(location.pathname)) {
+          //     navigate("/home");
+          //   }
         } else {
           setLoding(false);
           console.log("User Auth failed!");
           setIsAuthenticated(false);
+          //   if (!["/login", "/signup", "/"].includes(location.pathname)) {
+          //     navigate("/login");
+          //   }
         }
       } catch (error) {
         setLoding(false);
         console.log("User Auth failed!");
         setIsAuthenticated(false);
+        // if (!["/login", "/signup", "/"].includes(location.pathname)) {
+        //   navigate("/login");
+        // }
       }
     };
     authMount();
@@ -93,6 +104,48 @@ export default function AuthProvider({ children }) {
     };
   };
 
+  const changePass = async (e, toast, passData) => {
+    e.preventDefault();
+    try {
+      const response = await api.put("/changePass", passData);
+      if (response.status === 201) {
+        toast.success("Password changed successfully");
+      } else {
+        let data = response.data;
+        console.error(
+          "Error changing password: ",
+          response.status,
+          data.message
+        );
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response.data.error);
+    }
+  };
+
+  const updateInfos = async (e, toast, formData) => {
+    e.preventDefault();
+    try {
+      const response = await api.put(
+        "http://localhost:3000/updateInfos",
+        formData
+      );
+      if (response.status === 201) {
+        toast.success("User updated successfully");
+        setUser(response.data);
+      } else {
+        let data = response.data;
+        console.error("Error updating user: ", response.status, data.message);
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response.data);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -102,6 +155,8 @@ export default function AuthProvider({ children }) {
         handleLogout,
         handleLogin,
         handleImageChange,
+        updateInfos,
+        changePass,
       }}
     >
       {loading ? <Loading /> : children}
