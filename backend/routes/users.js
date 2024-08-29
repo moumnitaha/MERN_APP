@@ -14,6 +14,7 @@ exports.users = async (req, res) => {
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
       isFriend: user.friends.includes(req.user.userId),
+      cart: user.cart,
     };
   });
   res.send(newUsers);

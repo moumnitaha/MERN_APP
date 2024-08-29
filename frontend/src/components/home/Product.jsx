@@ -20,6 +20,8 @@ function Product() {
       title: formData.title,
       description: formData.description,
       price: formData.price,
+      quantity: formData.quantity,
+      rates: formData.rates,
       images: formData.images,
       category: {
         id: 0,
@@ -54,6 +56,8 @@ function Product() {
         description: product.description,
         price: product.price,
         images: product.images,
+        quantity: product.quantity,
+        rates: product.rates,
         category: {
           id: product.category.id,
           name: product.category.name,
@@ -103,6 +107,8 @@ function Product() {
         title: product.title,
         description: product.description,
         price: product.price,
+        quantity: product.quantity,
+        rates: product.rates,
         images: [...product.images, e.target.result],
         category: {
           id: product.category.id,
@@ -133,6 +139,8 @@ function Product() {
     title: "",
     description: "",
     price: 0,
+    quantity: 0,
+    rates: 0,
     images: [],
     category: {
       id: 0,
@@ -152,6 +160,8 @@ function Product() {
     createdAt: "",
     updatedAt: "",
     images: [],
+    quantity: 0,
+    rates: 0,
     category: {
       id: 0,
       name: "",
@@ -183,6 +193,8 @@ function Product() {
           createdAt: "",
           updatedAt: "",
           images: [],
+          quantity: 0,
+          rates: 0,
           category: {
             id: 0,
             name: "",
@@ -233,11 +245,12 @@ function Product() {
                   </button>
                   <img
                     key={index}
-                    className={`w-full h-full aspect-square object-contain rounded-md bg-stone-200 ${
+                    className={`w-full h-full aspect-square object-contain rounded-md bg-stone-200 cursor-pointer ${
                       img === index ? "border-2 border-red-600 blur-sm" : ""
                     }`}
                     src={image}
                     alt={product.title}
+                    onClick={() => window.open(image, "_blank")}
                   />
                 </div>
               ))
@@ -288,33 +301,37 @@ function Product() {
               {product.description}
             </p>
             <p className="text-xl font-semibold mb-4">
-              {product.price}
+              Price: {product.price}
               {"$"}
             </p>
-            <div className="mt-4">
-              <p className="text-sm mb-2">
-                Created At:{" "}
-                {new Date(product.createdAt).toLocaleString("FR-fr")}
+            <p className="text-lg font-semibold mb-4">
+              Quantity: {product.quantity}
+            </p>
+            <p className="text-lg font-semibold">Rates: {product.rates}</p>
+            <div className="flex flex-row items-center">
+              <p className="text-lg font-semibold mr-4">
+                Category: {product.category.name}
               </p>
-              <p className="text-sm mb-2">
-                Updated At:{" "}
-                {new Date(product.updatedAt).toLocaleString("FR-fr")}
-              </p>
-              <p className="text-sm mb-2">Category: {product.category.name}</p>
               <img
                 src={product.category.image}
                 className="w-20 h-20 rounded-full border-4 border-slate-200 shadow-lg"
                 alt={product.category.name}
               />
-              <p className="text-sm mb-2">
+            </div>
+            <p className="text-sm mb-2">
+              Created At: {new Date(product.createdAt).toLocaleString("FR-fr")}
+            </p>
+            <p className="text-sm mb-2">
+              Updated At: {new Date(product.updatedAt).toLocaleString("FR-fr")}
+            </p>
+            {/* <p className="text-sm mb-2">
                 Category Created At:{" "}
                 {new Date(product.category.createdAt).toLocaleString("FR-fr")}
               </p>
               <p className="text-sm">
                 Category Updated At:{" "}
                 {new Date(product.category.updatedAt).toLocaleString("FR-fr")}
-              </p>
-            </div>
+              </p> */}
           </div>
           <div className="flex flex-row items-center justify-end w-full mt-6">
             <button
@@ -327,6 +344,8 @@ function Product() {
                   title: product.title,
                   description: product.description,
                   price: product.price,
+                  rates: product.rates,
+                  quantity: product.quantity,
                   category: product.category.name,
                   images: product.images,
                 });
@@ -385,6 +404,26 @@ function Product() {
                         type="number"
                         className="p-2 m-6 border-2 border-gray-300 rounded-lg"
                         value={formData.price}
+                        onChange={handleChange}
+                      />
+                      <label className="text-lg font-semibold px-2">
+                        Rates
+                      </label>
+                      <input
+                        name="rates"
+                        type="number"
+                        className="p-2 m-6 border-2 border-gray-300 rounded-lg"
+                        value={formData.rates}
+                        onChange={handleChange}
+                      />
+                      <label className="text-lg font-semibold px-2">
+                        Quantity
+                      </label>
+                      <input
+                        name="quantity"
+                        type="number"
+                        className="p-2 m-6 border-2 border-gray-300 rounded-lg"
+                        value={formData.quantity}
                         onChange={handleChange}
                       />
                       <label className="text-lg font-semibold px-2">

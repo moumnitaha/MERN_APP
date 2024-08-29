@@ -5,6 +5,20 @@ const User = require("../models/user");
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
+  console.log("Cookies==> ", req.cookies);
+  if (req.cookies.accessToken) {
+    try {
+      let verify = jwt.verify(
+        req.cookies.accessToken,
+        process.env.ACCESS_TOKEN_SECRET
+      );
+      if (verify) {
+        return res.status(400).send("You are already logged in");
+      }
+    } catch (error) {
+      console.log(colors.red("Invalid access token"));
+    }
+  }
   try {
     const user = await User.findOne({ email });
     if (!user) {

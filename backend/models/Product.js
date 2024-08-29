@@ -19,6 +19,14 @@ const productSchema = new mongoose.Schema({
     type: Date,
     default: () => new Date(),
   },
+  quantity: {
+    type: Number,
+    required: true,
+  },
+  rates: {
+    type: Number,
+    default: 0,
+  },
   updatedAt: {
     type: Date,
     default: () => new Date(),

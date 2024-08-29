@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import createApiInstance from "../../interceptors/interceptor.js";
 import { Link } from "react-router-dom";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/20/solid";
 
 const api = createApiInstance();
 
@@ -10,6 +11,7 @@ const getProduct = async (setProducts) => {
     if (response.status === 200) {
       console.log("Products retrieved successfully");
       console.log(response.data.length);
+      console.table(response.data);
       setProducts(response.data);
     } else {
       console.error("Error retrieving products");
@@ -21,65 +23,227 @@ const getProduct = async (setProducts) => {
 
 function Products() {
   const [products, setProducts] = useState([]);
+  const [priceSort, setPriceSort] = useState(1);
+  const [categorySort, setCategorySort] = useState(1);
+  const [ratingSort, setRatingSort] = useState(1);
+  const [quantitySort, setQuantitySort] = useState(1);
+  const [titleSort, setTitleSort] = useState(1);
+  const [createdAtSort, setCreatedAtSort] = useState(1);
+  const [updatedAtSort, setUpdatedAtSort] = useState(1);
+  const [idSort, setIdSort] = useState(1);
   useEffect(() => {
     getProduct(setProducts);
   }, []);
+  {
+    products.length === 0 ? (
+      <h1 className="text-2xl text-center">No products found</h1>
+    ) : null;
+  }
   return (
-    <section className="flex flex-row flex-wrap justify-start pl-60 bg-[#f9f9f9]">
-      {products?.map((product) => {
-        return (
-          <Link
-            to={`/product/${product._id}`}
-            className="max-w-sm rounded overflow-hidden shadow-sm bg-white m-2 w-64 font-poppins hover:shadow-lg hover:scale-105 transition-all duration-200"
-            key={product._id}
-          >
-            <div className="relative">
-              <img
-                className="w-full h-48 object-cover"
-                src={product.images[0] || "https://via.placeholder.com/300"}
-                alt={product.title}
-                loading="lazy"
-              />
-              {product.images.length > 1 && (
-                <div className="absolute bottom-3 right-3 flex space-x-1">
-                  {product.images.slice(1, 4).map((image, index) => (
-                    <img
-                      key={index}
-                      className="w-8 h-8 object-cover rounded-full border-2 border-white shadow-lg"
-                      src={image}
-                      alt={`Product thumbnail ${index + 1}`}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col justify-between h-fit">
-              <div className="px-6 py-4">
-                <div className="font-bold text-xl text-gray-800 description-ellipsis">
-                  {product.title}
-                </div>
-              </div>
-              <div className="px-6 pb-2 ">
-                <span className="text-gray-800 font-semibold text-lg">
-                  {product.price}
-                  {"$"}
+    <section className="pl-60 bg-[#f9f9f9] h-fit">
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white border border-slate-200 rounded-lg shadow-sm">
+          <thead className="bg-slate-200 select-none">
+            <tr>
+              <th className="text-left px-6 py-3 text-slate-800 font-medium">
+                Image
+              </th>
+              <th
+                className="text-left px-6 py-3 text-slate-800 font-medium  cursor-pointer hover:text-blue-600 transition-colors hover:bg-slate-300 w-auto"
+                onClick={() => {
+                  let sortedProducts = products.sort(
+                    (a, b) => idSort * a._id.localeCompare(b._id)
+                  );
+                  setIdSort(idSort * -1);
+                  setProducts([...sortedProducts]);
+                }}
+              >
+                <span className="flex flex-row justify-between items-center">
+                  ID{" "}
+                  {idSort === 1 ? (
+                    <ChevronDownIcon className="h-5 w-5 inline-block" />
+                  ) : (
+                    <ChevronUpIcon className="h-5 w-5 inline-block" />
+                  )}
                 </span>
-              </div>
-              <div className="px-6 mb-4">
-                <p className="text-gray-700">{product.category.name}</p>
-              </div>
-              {/* <div className="flex justify-between">
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-1 rounded flex-1 m-1 h-12">
-                  Buy
-                </button>
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-1 rounded flex-1 m-1 h-12">
-                  Add to Cart
-                </button>
-              </div> */}
-            </div>
-          </Link>
-        );
-      })}
+              </th>
+              <th
+                className="text-left px-6 py-3 text-slate-800 font-medium cursor-pointer hover:text-blue-600 transition-colors hover:bg-slate-300 w-auto"
+                onClick={() => {
+                  let sortedProducts = products.sort(
+                    (a, b) => titleSort * a.title.localeCompare(b.title)
+                  );
+                  setTitleSort(titleSort * -1);
+                }}
+              >
+                <span className="flex flex-row justify-between items-center">
+                  Title{" "}
+                  {titleSort === 1 ? (
+                    <ChevronDownIcon className="h-5 w-5 inline-block" />
+                  ) : (
+                    <ChevronUpIcon className="h-5 w-5 inline-block" />
+                  )}
+                </span>
+              </th>
+              <th
+                className="text-left px-6 py-3 text-slate-800 font-medium cursor-pointer hover:text-blue-600 transition-colors hover:bg-slate-300 w-auto"
+                onClick={() => {
+                  let sortedProducts = products.sort(
+                    (a, b) =>
+                      categorySort *
+                      a.category.name.localeCompare(b.category.name)
+                  );
+                  setCategorySort(categorySort * -1);
+                  setProducts([...sortedProducts]);
+                }}
+              >
+                <span className="flex flex-row justify-between items-center">
+                  Category{" "}
+                  {categorySort === 1 ? (
+                    <ChevronDownIcon className="h-5 w-5 inline-block" />
+                  ) : (
+                    <ChevronUpIcon className="h-5 w-5 inline-block" />
+                  )}
+                </span>
+              </th>
+              <th
+                className="text-left px-6 py-3 text-slate-800 font-medium cursor-pointer hover:text-blue-600 transition-colors hover:bg-slate-300 w-auto"
+                onClick={() => {
+                  let sortedProducts = products.sort(
+                    (a, b) => priceSort * b.price - priceSort * a.price
+                  );
+                  setPriceSort(priceSort * -1);
+                  setProducts([...sortedProducts]);
+                }}
+              >
+                <span className="flex flex-row justify-between items-center">
+                  Price{" "}
+                  {priceSort === 1 ? (
+                    <ChevronDownIcon className="h-5 w-5 inline-block" />
+                  ) : (
+                    <ChevronUpIcon className="h-5 w-5 inline-block" />
+                  )}
+                </span>
+              </th>
+              <th
+                className="text-left px-6 py-3 text-slate-800 font-medium cursor-pointer hover:text-blue-600 transition-colors hover:bg-slate-300 w-auto"
+                onClick={() => {
+                  let sortedProducts = products.sort(
+                    (a, b) =>
+                      quantitySort * b.quantity - quantitySort * a.quantity
+                  );
+                  setQuantitySort(quantitySort * -1);
+                  setProducts([...sortedProducts]);
+                }}
+              >
+                <span className="flex flex-row justify-between items-center">
+                  Quantity{" "}
+                  {quantitySort === 1 ? (
+                    <ChevronDownIcon className="h-5 w-5 inline-block" />
+                  ) : (
+                    <ChevronUpIcon className="h-5 w-5 inline-block" />
+                  )}
+                </span>
+              </th>
+              <th
+                className="text-left px-6 py-3 text-slate-800 font-medium cursor-pointer hover:text-blue-600 transition-colors hover:bg-slate-300 w-auto"
+                onClick={() => {
+                  let sortedProducts = products.sort(
+                    (a, b) => ratingSort * b.rates - ratingSort * a.rates
+                  );
+                  setRatingSort(ratingSort * -1);
+                  setProducts([...sortedProducts]);
+                }}
+              >
+                <span className="flex flex-row justify-between items-center">
+                  Rating{" "}
+                  {ratingSort === 1 ? (
+                    <ChevronDownIcon className="h-5 w-5 inline-block" />
+                  ) : (
+                    <ChevronUpIcon className="h-5 w-5 inline-block" />
+                  )}
+                </span>
+              </th>
+              <th className="text-left px-6 py-3 text-slate-800 font-medium cursor-pointer hover:text-blue-600 transition-colors hover:bg-slate-300 w-auto">
+                Created At
+              </th>
+              <th className="text-left px-6 py-3 text-slate-800 font-medium cursor-pointer hover:text-blue-600 transition-colors hover:bg-slate-300 w-auto">
+                Updated At
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {products.map((product) => (
+              <tr
+                key={product._id}
+                className="hover:bg-slate-100 transition-colors duration-150 border border-t-blue-100"
+              >
+                <td className="px-6 py-4">
+                  <Link
+                    to={`/product/${product._id}`}
+                    className="flex items-center"
+                  >
+                    <img
+                      className="w-14 h-14 object-cover rounded-md border border-slate-200 hover:scale-150 transition-transform hover:border-blue-400"
+                      src={
+                        product.images[0] || "https://via.placeholder.com/300"
+                      }
+                      alt={product.title}
+                      loading="lazy"
+                    />
+                  </Link>
+                </td>
+                <td className="px-6 py-4">
+                  <Link
+                    to={`/product/${product._id}`}
+                    className="text-slate-800 font-semibold hover:text-blue-600 transition-colors"
+                  >
+                    {product._id}
+                  </Link>
+                </td>
+                <td className="px-6 py-4">
+                  <Link
+                    to={`/product/${product._id}`}
+                    className="text-slate-800 font-semibold hover:text-blue-600 transition-colors"
+                  >
+                    {product.title}
+                  </Link>
+                </td>
+                <td className="px-6 py-4">
+                  <span className="text-slate-700">
+                    {product.category.name}
+                  </span>
+                </td>
+                <td className="px-6 py-4">
+                  <span className="text-slate-800 font-semibold">
+                    {product.price}$
+                  </span>
+                </td>
+                <td className="px-6 py-4">
+                  <span className="text-slate-800 font-semibold">
+                    {product.quantity}
+                  </span>
+                </td>
+                <td className="px-6 py-4">
+                  <span className="text-slate-800 font-semibold">
+                    {product.rates}
+                  </span>
+                </td>
+                <td className="px-6 py-4">
+                  <span className="text-slate-700">
+                    {new Date(product.createdAt).toLocaleString("FR-fr")}
+                  </span>
+                </td>
+                <td className="px-6 py-4">
+                  <span className="text-slate-700">
+                    {new Date(product.updatedAt).toLocaleString("FR-fr")}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </section>
   );
 }

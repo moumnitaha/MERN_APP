@@ -43,36 +43,44 @@ function Settings() {
         Settings
       </span>
       <span className="m-4 text-xl font-bold">Change Avatar</span>
-      <label
-        htmlFor="upload"
-        className="flex flex-col items-center justify-center gap-2 cursor-pointer max-w-56 h-56 aspect-square m-5 relative p-5 border-2 border-dashed border-gray-300 rounded-md"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-16 w-16 fill-white stroke-blue-500"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth="2"
+      <form className="flex flex-col justify-center items-center pl-3">
+        <label
+          htmlFor="upload"
+          className="flex flex-col items-center justify-center gap-2 cursor-pointer max-w-40 h-40 aspect-square m-5 relative p-5 border-2 border-dashed border-gray-300 rounded-md"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-          />
-        </svg>
-        <span className="text-gray-600 font-medium">Upload New Avatar</span>
-      </label>
-      <input
-        id="upload"
-        name="images"
-        type="file"
-        accept="image/png, image/jpeg, image/jpg"
-        className="hidden"
-        onChange={(e) => handleImageChange(e, toast)}
-      />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-16 w-16 fill-white stroke-blue-500"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
+          </svg>
+          <span className="text-gray-600 font-medium">Upload New Avatar</span>
+        </label>
+        <input
+          id="upload"
+          name="images"
+          type="file"
+          accept="image/png, image/jpeg, image/jpg"
+          className="hidden"
+          onChange={(e) => handleImageChange(e, toast)}
+        />
+        <button
+          className="w-48 p-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 m-1"
+          type="submit"
+        >
+          Change Avatar
+        </button>
+      </form>
       <span className="m-4 text-xl font-bold">Change User Infos</span>
       <form
-        className="w-1/2 h-fit flex flex-col justify-between items-center p-4"
+        className="w-1/3 h-fit flex flex-col justify-between items-center p-4"
         onSubmit={(e) => updateInfos(e, toast, formData)}
       >
         <input
@@ -102,7 +110,7 @@ function Settings() {
       </form>
       <span className="m-4 text-xl font-bold">Change Password</span>
       <form
-        className="w-1/2 h-fit flex flex-col justify-between items-center p-4"
+        className="w-1/3 h-fit flex flex-col justify-between items-center p-4"
         onSubmit={async (e) => {
           await changePass(e, toast, passwordData);
           setPasswordData({ oldPassword: "", newPassword: "" });

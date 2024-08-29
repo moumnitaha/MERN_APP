@@ -6,6 +6,9 @@ export default {
       fontFamily: {
         poppins: ["Poppins"],
       },
+      scale: {
+        200: "2",
+      },
     },
   },
   plugins: [],

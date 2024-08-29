@@ -11,6 +11,7 @@ const getUsers = async (setUsers) => {
     const response = await api.get("/users");
     if (response.status === 200) {
       console.log("Users retrieved successfully");
+      console.log(response.data);
       setUsers(response.data);
       console.log(response.data);
     } else {

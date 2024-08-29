@@ -16,6 +16,8 @@ const productValidator = (req, res, next) => {
       //   createdAt: Joi.date(),
       //   updatedAt: Joi.date(),
     }).required(),
+    quantity: Joi.number().min(1).max(1_000).required(),
+    rates: Joi.number().min(0).max(5).required(),
   });
   const { error } = addProductSchema.validate(req.body.product);
   if (error) {

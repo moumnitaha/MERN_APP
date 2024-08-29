@@ -108,6 +108,8 @@ const products = async (req, res) => {
         description: 1,
         price: 1,
         images: 1,
+        quantity: 1,
+        rates: 1,
         category: 1,
         createdAt: 1,
         updatedAt: 1,
