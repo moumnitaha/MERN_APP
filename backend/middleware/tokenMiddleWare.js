@@ -18,7 +18,7 @@ const authenticateToken = async (req, res, next) => {
       token: refreshToken,
     });
     if (blacklistedToken) {
-      res.clearCookie("refreshToken");
+      //   res.clearCookie("refreshToken");
       console.log(
         colors.red("Already blacklisted token from middleware for:"),
         colors.cyan(requestPath)
@@ -30,7 +30,7 @@ const authenticateToken = async (req, res, next) => {
     try {
       jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
     } catch (error) {
-      res.clearCookie("refreshToken");
+      //   res.clearCookie("refreshToken");
       if (error.name === "TokenExpiredError") {
         let blackedToken = new BlacklistedToken({
           token: refreshToken,

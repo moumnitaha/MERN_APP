@@ -9,7 +9,7 @@ const products = async (req, res) => {
   console.log("products Query => ", req.query);
   try {
     let mainQuery = {};
-    let { limit, search, min, max, category, page, sort = 1, id } = req.query;
+    let { limit, search, min, max, category, page, sort, id } = req.query;
     if (id) {
       if (id.length !== 24) {
         return res.status(400).send({ error: "Invalid product id" });
@@ -42,7 +42,7 @@ const products = async (req, res) => {
         .status(400)
         .send({ error: "Invalid limit number, should be a positive number" });
     }
-    if (parseInt(sort) !== 1 && parseInt(sort) !== -1) {
+    if (sort && parseInt(sort) !== 1 && parseInt(sort) !== -1) {
       return res
         .status(400)
         .send({ error: "Invalid sort value, should be 1 or -1" });
@@ -99,7 +99,7 @@ const products = async (req, res) => {
     console.log("Final Query => ", mainQuery);
     const skip = (page - 1) * limit;
     const products = await Product.find(mainQuery)
-      .sort({ price: parseInt(sort) })
+      .sort(parseInt(sort) ? { price: parseInt(sort) } : { _id: -1 })
       .limit(limit)
       .skip(skip)
       .select({
@@ -113,6 +113,8 @@ const products = async (req, res) => {
         category: 1,
         createdAt: 1,
         updatedAt: 1,
+        orders: 1,
+        refunds: 1,
       });
 
     // const ensureDirectoryExistence = (dirPath) => {
@@ -142,16 +144,16 @@ const products = async (req, res) => {
     //     index++;
     //   }
     // }
-    for (let product of products) {
-      if (
-        !product?.category?.image.includes(
-          "http://localhost:3000/uploads/categories/"
-        )
-      ) {
-        product.category.image = `http://localhost:3000/uploads/categories/${product.category.name}/${product.category.name}.jpg`;
-        await product.save();
-      }
-    }
+    // for (let product of products) {
+    //   if (
+    //     !product?.category?.image.includes(
+    //       "http://localhost:3000/uploads/categories/"
+    //     )
+    //   ) {
+    //     product.category.image = `http://localhost:3000/uploads/categories/${product.category.name}/${product.category.name}.jpg`;
+    //     await product.save();
+    //   }
+    // }
     res.send(products);
   } catch (error) {
     console.log(error);

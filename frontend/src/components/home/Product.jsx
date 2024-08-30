@@ -382,9 +382,10 @@ function Product() {
                       <input
                         name="title"
                         type="text"
-                        className="p-2 m-6 border-2 border-gray-300 rounded-lg"
+                        className="p-2 m-2 border-2 border-gray-300 rounded-lg"
                         value={formData.title}
                         onChange={handleChange}
+                        placeholder="Example: Black hoodie with stripes"
                       />
                       <label className="text-lg font-semibold px-2">
                         Description
@@ -392,50 +393,81 @@ function Product() {
                       <textarea
                         name="description"
                         type="text-area"
-                        className="p-2 m-6 border-2 border-gray-300 rounded-lg min-h-20"
+                        className="p-2 border-2 border-gray-300 ml-2 mt-2 mr-2 rounded-lg min-h-32"
                         value={formData.description}
                         onChange={handleChange}
+                        placeholder="Description must be between 100 and 500 characters"
                       />
-                      <label className="text-lg font-semibold px-2">
-                        Price
-                      </label>
-                      <input
-                        name="price"
-                        type="number"
-                        className="p-2 m-6 border-2 border-gray-300 rounded-lg"
-                        value={formData.price}
-                        onChange={handleChange}
-                      />
-                      <label className="text-lg font-semibold px-2">
-                        Rates
-                      </label>
-                      <input
-                        name="rates"
-                        type="number"
-                        className="p-2 m-6 border-2 border-gray-300 rounded-lg"
-                        value={formData.rates}
-                        onChange={handleChange}
-                      />
-                      <label className="text-lg font-semibold px-2">
-                        Quantity
-                      </label>
-                      <input
-                        name="quantity"
-                        type="number"
-                        className="p-2 m-6 border-2 border-gray-300 rounded-lg"
-                        value={formData.quantity}
-                        onChange={handleChange}
-                      />
-                      <label className="text-lg font-semibold px-2">
-                        Category
-                      </label>
-                      <input
-                        name="category"
-                        type="text"
-                        className="p-2 m-6 border-2 border-gray-300 rounded-lg"
-                        value={formData.category}
-                        onChange={handleChange}
-                      />
+                      <p className="text-red-500 text-sm mb-2 ml-2">
+                        {formData.description.length &&
+                        (formData.description.length < 100 ||
+                          formData.description.length > 500)
+                          ? "Description must be between 100 and 500 characters"
+                          : " "}
+                      </p>
+                      <div className="flex flex-row items-center justify-between">
+                        <div className="flex flex-col flex-1">
+                          <label className="text-lg font-semibold px-2">
+                            Price
+                          </label>
+                          <input
+                            name="price"
+                            type="number"
+                            min={0}
+                            max={100_000}
+                            className="p-2 m-2 border-2 border-gray-300 rounded-lg"
+                            value={formData.price}
+                            onChange={handleChange}
+                          />
+                        </div>
+                        <div className="flex flex-col flex-1">
+                          <label className="text-lg font-semibold px-2">
+                            Quantity
+                          </label>
+                          <input
+                            name="quantity"
+                            type="number"
+                            min={0}
+                            max={1_000}
+                            className="p-2 m-2 border-2 border-gray-300 rounded-lg"
+                            value={formData.quantity}
+                            onChange={handleChange}
+                          />
+                        </div>
+                      </div>
+                      <div className="flex flex-row items-center justify-between">
+                        <div className="flex flex-col flex-1">
+                          <label className="text-lg font-semibold px-2">
+                            Rates
+                          </label>
+                          <input
+                            name="rates"
+                            type="number"
+                            min={0}
+                            max={5}
+                            className="p-2 m-2 border-2 border-gray-300 rounded-lg"
+                            value={formData.rates}
+                            onChange={handleChange}
+                          />
+                        </div>
+                        <div className="flex flex-col flex-1">
+                          <label className="text-lg font-semibold px-2">
+                            Category
+                          </label>
+                          <select
+                            name="category"
+                            className="p-2 m-2 border-2 border-gray-300 rounded-lg"
+                            value={formData.category}
+                            onChange={handleChange}
+                          >
+                            <option value="Clothes">Clothes</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Furniture">Furniture</option>
+                            <option value="Shoes">Shoes</option>
+                            <option value="Miscellaneous">Miscellaneous</option>
+                          </select>
+                        </div>
+                      </div>
                       {/* <label className="text-lg font-semibold px-2">
                         Add Images
                       </label>

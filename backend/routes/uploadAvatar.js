@@ -6,6 +6,7 @@ const User = require("../models/user");
 
 exports.upload_avatar = async (req, res) => {
   const avatar = req.body.avatar;
+  if (!avatar) return res.status(500).send("sir lhih");
   try {
     const base64Data = avatar.replace(
       /^data:image\/(png|jpg|jpeg);base64,/,
@@ -14,11 +15,7 @@ exports.upload_avatar = async (req, res) => {
     const imageType = avatar.match(/^data:image\/(png|jpg|jpeg);base64,/)[1];
     const fileName = `${req.user.userId}_${Date.now()}_avatar.${imageType}`;
     const avatarsFolder = path.join(__dirname, "../uploads/avatars");
-    const avatarPath = path.join(
-      __dirname,
-      "../uploads/avatars",
-      req.user.userId.toString()
-    );
+    const avatarPath = path.join(avatarsFolder, req.user.userId.toString());
     const filePath = path.join(avatarPath, fileName);
     // if (!fs.existsSync(avatarsFolder)) {
     //   fs.mkdirSync(avatarsFolder, {

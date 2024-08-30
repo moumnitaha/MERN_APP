@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState } from "react";
 import createApiInstance from "../interceptors/interceptor";
 import Loading from "../components/Loading";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const api = createApiInstance();
 
@@ -87,21 +88,17 @@ export default function AuthProvider({ children }) {
     }
   }
 
-  const handleImageChange = async (e, toast) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = async () => {
-      const response = await api.post("/upload_avatar", {
-        avatar: reader.result,
-      });
-      if (response.status === 200) {
-        toast.success("Avatar uploaded successfully");
-        setUser({ ...user, avatar: response.data.newAvatar });
-      } else {
-        toast.error("Error uploading avatar");
-      }
-    };
+  const handleImageChange = async (e, img) => {
+    e.preventDefault();
+    const response = await api.post("/upload_avatar", {
+      avatar: img,
+    });
+    if (response.status === 200) {
+      toast.success("Avatar uploaded successfully");
+      setUser({ ...user, avatar: response.data.newAvatar });
+    } else {
+      toast.error("Error uploading avatar");
+    }
   };
 
   const changePass = async (e, toast, passData) => {

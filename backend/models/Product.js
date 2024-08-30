@@ -27,6 +27,14 @@ const productSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  orders: {
+    type: Number,
+    default: 0,
+  },
+  refunds: {
+    type: Number,
+    default: 0,
+  },
   updatedAt: {
     type: Date,
     default: () => new Date(),
