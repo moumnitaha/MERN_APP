@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const colors = require("colors");
-const User = require("../models/user");
+const User = require("../models/User");
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
@@ -12,7 +12,11 @@ exports.login = async (req, res) => {
         req.cookies.accessToken,
         process.env.ACCESS_TOKEN_SECRET
       );
-      if (verify) {
+      let refreshVerify = jwt.verify(
+        req.cookies.refreshToken,
+        process.env.REFRESH_TOKEN_SECRET
+      );
+      if (verify && refreshVerify) {
         return res.status(400).send("You are already logged in");
       }
     } catch (error) {

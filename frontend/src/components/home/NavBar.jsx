@@ -7,6 +7,8 @@ import {
   BuildingStorefrontIcon,
   PlusCircleIcon,
   Cog6ToothIcon,
+  ClipboardDocumentListIcon,
+  PlusIcon,
 } from "@heroicons/react/24/outline";
 
 const api = createApiInstance();
@@ -112,6 +114,28 @@ function NavBar() {
         >
           <PlusCircleIcon className="h-5 w-5 inline-block mr-2" />
           Add Product
+        </Link>
+        <Link
+          className={`w-48 p-3 ${
+            location.pathname === "/orders"
+              ? "bg-blue-100 text-blue-500"
+              : "bg-transparent text-gray-800"
+          } rounded-md font-medium hover:bg-blue-100 m-1`}
+          to="/orders"
+        >
+          <ClipboardDocumentListIcon className="h-5 w-5 inline-block mr-2" />
+          Orders
+        </Link>
+        <Link
+          className={`w-48 p-3 ${
+            location.pathname === "/addOrder"
+              ? "bg-blue-100 text-blue-500"
+              : "bg-transparent text-gray-800"
+          } rounded-md font-medium hover:bg-blue-100 m-1`}
+          to="/addOrder"
+        >
+          <PlusIcon className="h-5 w-5 inline-block mr-2" />
+          Add Order
         </Link>
         <Link
           className={`w-48 p-3 ${

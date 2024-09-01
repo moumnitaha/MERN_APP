@@ -86,7 +86,7 @@ function addProduct() {
   };
 
   return (
-    <section className="flex flex-col items-start justify-start w-fit max-w-svw min-h-svh h-fit pl-60">
+    <section className="flex flex-col items-start justify-start min-w-fit max-w-svw min-h-svh h-fit pl-60 bg-[#f9f9f9]">
       <ToastContainer
         theme="dark"
         position="top-right"
@@ -179,6 +179,7 @@ function addProduct() {
               value={formData.category}
               onChange={handleChange}
             >
+              <option value="">Select a category</option>
               <option value="Clothes">Clothes</option>
               <option value="Electronics">Electronics</option>
               <option value="Furniture">Furniture</option>

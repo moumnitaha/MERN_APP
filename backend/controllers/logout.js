@@ -1,6 +1,6 @@
 const colors = require("colors");
 const jwt = require("jsonwebtoken");
-const BlacklistedToken = require("../models/blacklistedTokens");
+const BlacklistedToken = require("../models/BlacklistedTokens");
 
 exports.logout = async (req, res) => {
   try {

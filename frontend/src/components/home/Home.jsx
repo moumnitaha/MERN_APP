@@ -6,6 +6,10 @@ import { ToastContainer, toast } from "react-toastify";
 
 const api = createApiInstance();
 
+const toggleDarkMode = () => {
+  document.documentElement.classList.toggle("dark");
+};
+
 const getUsers = async (setUsers) => {
   try {
     const response = await api.get("/users");
@@ -90,6 +94,12 @@ function Home() {
             </div>
           </div>
         ))}
+        <button
+          className="w-48 p-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 text-center"
+          onClick={toggleDarkMode}
+        >
+          Toggle Dark Mode
+        </button>
       </div>
     </section>
   );

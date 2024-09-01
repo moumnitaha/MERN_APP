@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const colors = require("colors");
-const BlacklistedToken = require("../models/blacklistedTokens");
+const BlacklistedToken = require("../models/BlacklistedTokens");
 
 const authenticateToken = async (req, res, next) => {
   const requestPath = req.path;

@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const colors = require("colors");
-const User = require("../models/user");
-const BlacklistedToken = require("../models/blacklistedTokens");
+const User = require("../models/User");
+const BlacklistedToken = require("../models/BlacklistedTokens");
 
 exports.refresh = async (req, res) => {
   try {

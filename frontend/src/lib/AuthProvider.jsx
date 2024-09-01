@@ -15,6 +15,7 @@ export default function AuthProvider({ children }) {
     email: "",
     createdAt: "",
     avatar: "",
+    _id: "",
   });
   const [loading, setLoding] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);

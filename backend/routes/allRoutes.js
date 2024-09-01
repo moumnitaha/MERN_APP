@@ -13,6 +13,8 @@ const products = require("./products");
 const { addProduct } = require("./addProduct");
 const { updateProduct } = require("./updateProduct");
 const { deleteProduct } = require("./deleteProduct");
+const { getOrders } = require("./getOrders");
+const { addOrder } = require("./addOrder");
 const { me } = require("./me");
 const { users } = require("./users");
 const authenticateToken = require("../middleware/tokenMiddleWare");
@@ -40,6 +42,8 @@ router.get("/users", authenticateToken, users);
 router.get("/products", authenticateToken, products);
 router.post("/addProduct", authenticateToken, productValidator, addProduct);
 router.put("/changePass", authenticateToken, changePassValidator, changePass);
+router.get("/orders", authenticateToken, getOrders);
+router.post("/addOrder", authenticateToken, addOrder);
 router.put(
   "/updateInfos",
   authenticateToken,

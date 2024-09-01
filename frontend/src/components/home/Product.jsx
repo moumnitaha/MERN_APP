@@ -510,13 +510,13 @@ function Product() {
                   <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-fit bg-white outline-none focus:outline-none text-black m-auto">
                     {/*header*/}
                     <label className="text-3xl font-semibold text-center p-6">
-                      Delete {img ? "Image" : "Product"}
+                      Delete {img !== null ? "Image" : "Product"}
                     </label>
                     {/*body*/}
                     <div className="flex flex-col p-6 w-[calc(50svw)]">
                       <label className="text-lg font-light px-2">
                         Are you sure you want to delete this{" "}
-                        {img ? "Image" : "product"}?
+                        {img !== null ? "Image" : "product"}?
                       </label>
                       {/*footer*/}
                       <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
@@ -536,7 +536,7 @@ function Product() {
                           type="button"
                           onClick={() => deleteProduct(img)}
                         >
-                          Delete {img ? "Image" : "Product"}
+                          Delete {img !== null ? "Image" : "Product"}
                         </button>
                       </div>
                     </div>
@@ -550,7 +550,14 @@ function Product() {
       ) : loading ? (
         <p>Loading...</p>
       ) : (
-        <p>Product not found</p>
+        <section className="w-full h-screen flex flex-col items-center justify-center">
+          <h1 className="text-5xl font-semibold text-center text-gray-800 w-1/2">
+            404
+          </h1>
+          <h5 className="text-5xl font-semibold text-center text-gray-800 w-1/2">
+            Product not found
+          </h5>
+        </section>
       )}
     </section>
   );

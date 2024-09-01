@@ -13,6 +13,8 @@ import AuthProvider from "./lib/AuthProvider.jsx";
 import AddProduct from "./components/home/addProduct.jsx";
 import "react-toastify/dist/ReactToastify.css";
 import Settings from "./components/home/Settings.jsx";
+import Orders from "./components/home/Orders.jsx";
+import AddOrder from "./components/home/addOrder.jsx";
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
           <Route path="/product/:id" element={<Product />} />
           <Route path="/addProduct" element={<AddProduct />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/addOrder" element={<AddOrder />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </AuthProvider>

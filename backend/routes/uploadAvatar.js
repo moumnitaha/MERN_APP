@@ -2,7 +2,7 @@ const express = require("express");
 const colors = require("colors");
 const fs = require("fs");
 const path = require("path");
-const User = require("../models/user");
+const User = require("../models/User");
 
 exports.upload_avatar = async (req, res) => {
   const avatar = req.body.avatar;
