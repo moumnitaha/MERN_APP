@@ -2,6 +2,8 @@ const User = require("../models/User");
 
 exports.updateInfos = async (req, res) => {
   const { firstName, lastName } = req.body;
+  console.log("firstName", firstName);
+  console.log("lastName", lastName);
   try {
     const user = await User.findByIdAndUpdate(
       req.user.userId,

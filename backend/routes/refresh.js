@@ -6,7 +6,7 @@ const BlacklistedToken = require("../models/BlacklistedTokens");
 exports.refresh = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
-    if (!refreshToken) return res.status(401).send("Access denied");
+    if (!refreshToken) return res.status(401).send({ error: "Access denied" });
     let blacklistedToken = await BlacklistedToken.findOne({
       token: refreshToken,
     });

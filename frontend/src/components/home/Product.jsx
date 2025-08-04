@@ -248,9 +248,11 @@ function Product() {
                     className={`w-full h-full aspect-square object-contain rounded-md bg-stone-200 cursor-pointer ${
                       img === index ? "border-2 border-red-600 blur-sm" : ""
                     }`}
-                    src={image}
+                    src={`http://localhost:3000${image}`}
                     alt={product.title}
-                    onClick={() => window.open(image, "_blank")}
+                    onClick={() =>
+                      window.open(`http://localhost:3000${image}`, "_blank")
+                    }
                   />
                 </div>
               ))
@@ -313,7 +315,7 @@ function Product() {
                 Category: {product.category.name}
               </p>
               <img
-                src={product.category.image}
+                src={`http://localhost:3000${product.category.image}`}
                 className="w-20 h-20 rounded-full border-4 border-slate-200 shadow-lg"
                 alt={product.category.name}
               />

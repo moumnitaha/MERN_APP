@@ -53,7 +53,13 @@ function Home() {
   }, []);
   return (
     <section className="w-svw h-svh flex flex-col items-start justify-start bg-[#f9f9f9] text-white font-extrabold pl-60">
-      <div className="flex flex-row items-center justify-around p-2 m-2 rounded-lg">
+      <h1 className="text-4xl font-bold text-black text-center m-5">
+        Welcome to the Home Page
+      </h1>
+      <h3 className="text-zinc-800 font-bold text-center ml-5">
+        Active users:
+      </h3>
+      <div className="flex flex-col items-center justify-around p-2 m-2 rounded-lg">
         {users?.map((user) => (
           <div
             key={user._id}
@@ -61,7 +67,7 @@ function Home() {
           >
             <div className="w-24 h-24 rounded-full m-2">
               <img
-                src={user.avatar}
+                src={`http://localhost:3000${user.avatar}`}
                 alt="avatar"
                 className="w-24 h-24 rounded-full"
               />
@@ -94,12 +100,12 @@ function Home() {
             </div>
           </div>
         ))}
-        <button
+        {/* <button
           className="w-48 p-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 text-center"
           onClick={toggleDarkMode}
         >
           Toggle Dark Mode
-        </button>
+        </button> */}
       </div>
     </section>
   );

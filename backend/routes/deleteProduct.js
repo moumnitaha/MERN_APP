@@ -33,7 +33,7 @@ exports.deleteProduct = async (req, res) => {
           let fileExt = file.match(/^.*\.(png|jpg|jpeg)$/)[1];
           product.images[
             index
-          ] = `http://localhost:3000/uploads/products/${prd._id}/${prd._id}_${index}.${fileExt}`;
+          ] = `/uploads/products/${prd._id}/${prd._id}_${index}.${fileExt}`;
         });
         await product.save();
         return res.status(200).json({ message: "Image deleted successfully" });

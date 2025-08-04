@@ -4,7 +4,7 @@ const User = require("../models/User");
 
 exports.getOrders = async (req, res) => {
   try {
-    let orders = await Order.find({ user: req.user.userId });
+    let orders = await Order.find({});
     if (!orders.length) {
       return res.status(404).send({ message: "No orders found" });
     }
@@ -31,7 +31,7 @@ exports.getOrders = async (req, res) => {
             };
           })
         );
-        let user = await User.findById(order.user);
+        let user = await User.findById(order.customer);
         return {
           _id: order._id,
           products: products,
@@ -41,14 +41,14 @@ exports.getOrders = async (req, res) => {
           ),
           quantity: products.reduce((acc, item) => acc + item.quantity, 0),
           status: order.status,
-          user: user.firstName + " " + user.lastName,
+          user: user ? user.firstName + " " + user.lastName : "unknown",
           createdAt: order.createdAt,
         };
       })
     );
-    console.log("newOrders", newOrders.length);
     return res.status(200).send(newOrders);
   } catch (error) {
+    console.log("Error fetching orders: ", error.message);
     return res
       .status(500)
       .send({ message: "Server error", error: error.message });

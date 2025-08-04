@@ -27,10 +27,10 @@ exports.addProduct = async (req, res) => {
         prd.images[i].replace(/^data:image\/(png|jpg|jpeg);base64,/, ""),
         "base64"
       );
-      product.category.image = `http://localhost:3000/uploads/categories/${prd.category.name}/${prd.category.name}.jpg`;
+      product.category.image = `/uploads/categories/${prd.category.name}/${prd.category.name}.jpg`;
       product.images[
         i
-      ] = `http://localhost:3000/uploads/products/${product._id}/${product._id}_${i}.${imgExt}`;
+      ] = `/uploads/products/${product._id}/${product._id}_${i}.${imgExt}`;
     }
     await product.save();
     res.send({ message: "Product added successfully", id: product._id });

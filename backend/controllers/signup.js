@@ -9,7 +9,9 @@ exports.signup = async (req, res) => {
   try {
     const euser = await User.findOne({ email });
     if (euser) {
-      return res.status(400).send("User already exists with this email");
+      return res
+        .status(400)
+        .send({ error: "User already exists with this email" });
     }
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -18,7 +20,7 @@ exports.signup = async (req, res) => {
       lastName,
       email,
       password: hashedPassword,
-      avatar: `http://localhost:3000/uploads/avatars/noUser.png`,
+      avatar: `/uploads/avatars/noUser.png`,
     });
     const emailToken = jwt.sign(
       { userId: user._id, type: "email", email },
@@ -32,7 +34,9 @@ exports.signup = async (req, res) => {
       sendVerificationEmail(email, emailToken);
     } catch (err) {
       console.log(err);
-      return res.status(500).send("Error sending verification email");
+      return res
+        .status(500)
+        .send({ error: "Error sending verification email" });
     }
     const refreshToken = jwt.sign(
       { userId: user._id, type: "refresh" },
@@ -52,6 +56,6 @@ exports.signup = async (req, res) => {
     res.status(201).send("User created successfully");
   } catch (err) {
     console.log(err);
-    res.status(500).send({ message: `Error creating user: ${err.errmsg}` });
+    res.status(500).send({ error: `Error creating user: ${err.errmsg}` });
   }
 };

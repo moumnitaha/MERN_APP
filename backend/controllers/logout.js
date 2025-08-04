@@ -13,10 +13,10 @@ exports.logout = async (req, res) => {
   } catch (err) {
     console.log(err);
     console.log(colors.red("Error blacklisting token"));
-    return res.status(500).send("Error blacklisting token");
+    return res.status(500).send({ error: "Error blacklisting token" });
   }
   res.clearCookie("accessToken");
   res.clearCookie("refreshToken");
   console.log(colors.green("Logged out successfully"));
-  res.status(200).send("Logged out successfully");
+  res.status(200).send({ res: "Logged out successfully" });
 };

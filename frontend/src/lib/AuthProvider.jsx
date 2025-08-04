@@ -102,7 +102,7 @@ export default function AuthProvider({ children }) {
     }
   };
 
-  const changePass = async (e, toast, passData) => {
+  const changePass = async (e, passData) => {
     e.preventDefault();
     try {
       const response = await api.put("/changePass", passData);
@@ -123,7 +123,7 @@ export default function AuthProvider({ children }) {
     }
   };
 
-  const updateInfos = async (e, toast, formData) => {
+  const updateInfos = async (e, formData) => {
     e.preventDefault();
     try {
       const response = await api.put(

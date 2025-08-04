@@ -24,10 +24,10 @@ exports.updateProduct = async (req, res) => {
     );
     prd.images[
       index
-    ] = `http://localhost:3000/uploads/products/${prd._id}/${prd._id}_${index}.${imgExt}`;
+    ] = `/uploads/products/${prd._id}/${prd._id}_${index}.${imgExt}`;
   }
 
-  prd.category.image = `http://localhost:3000/uploads/categories/${prd.category.name}/${prd.category.name}.jpg`;
+  prd.category.image = `/uploads/categories/${prd.category.name}/${prd.category.name}.jpg`;
 
   try {
     const updated = await Product.updateOne({ _id: prd._id }, { $set: prd });

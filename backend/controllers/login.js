@@ -5,37 +5,41 @@ const User = require("../models/User");
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
-  console.log("Cookies==> ", req.cookies);
-  if (req.cookies.accessToken) {
-    try {
-      let verify = jwt.verify(
-        req.cookies.accessToken,
-        process.env.ACCESS_TOKEN_SECRET
-      );
-      let refreshVerify = jwt.verify(
-        req.cookies.refreshToken,
-        process.env.REFRESH_TOKEN_SECRET
-      );
-      if (verify && refreshVerify) {
-        return res.status(400).send("You are already logged in");
-      }
-    } catch (error) {
-      console.log(colors.red("Invalid access token"));
-    }
-  }
+  console.log("LOGIN Cookies==> ", req.cookies);
+  //   if (req.cookies.accessToken) {
+  //     try {
+  //       let verify = jwt.verify(
+  //         req.cookies.accessToken,
+  //         process.env.ACCESS_TOKEN_SECRET
+  //       );
+  //       let refreshVerify = jwt.verify(
+  //         req.cookies.refreshToken,
+  //         process.env.REFRESH_TOKEN_SECRET
+  //       );
+  //       if (verify && refreshVerify) {
+  //         return res.status(400).json({ error: "You are already logged in" });
+  //       }
+  //     } catch (error) {
+  //       console.log(colors.red("Invalid access token"));
+  //     }
+  //   }
   try {
     const user = await User.findOne({ email });
+    console.log(user);
     if (!user) {
-      return res.status(400).send("User not found");
+      return res.status(400).json({ error: "User not found" });
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).send("Invalid credentials");
+      return res.status(400).json({ error: "Invalid credentials" });
     }
     if (!user.isVerified) {
       return res
         .status(400)
-        .send("Please verify your email first before logging in");
+        .json({ error: "Please verify your email first before logging in" });
+    } else {
+      user.verificationToken = undefined;
+      await user.save();
     }
     const accessToken = jwt.sign(
       { userId: user._id, type: "access" },
@@ -71,8 +75,11 @@ exports.login = async (req, res) => {
       //   maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     console.log(colors.green("Login successfuly"));
-    res.status(200).send(user);
+    let userWithoutPassword = user.toObject();
+    delete userWithoutPassword.password;
+    res.status(200).send(userWithoutPassword);
   } catch (err) {
+    console.log("try error => ", err);
     res.status(500).send("Error logging in");
   }
 };

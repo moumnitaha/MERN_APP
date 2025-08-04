@@ -123,7 +123,7 @@ function Settings() {
       <span className="m-4 text-xl font-bold">Change User Infos</span>
       <form
         className="w-1/4 h-fit flex flex-col justify-between items-center p-3"
-        onSubmit={(e) => updateInfos(e, toast, formData)}
+        onSubmit={(e) => updateInfos(e, formData)}
       >
         <input
           type="text"
@@ -154,7 +154,7 @@ function Settings() {
       <form
         className="w-1/4 h-fit flex flex-col justify-between items-center p-3"
         onSubmit={async (e) => {
-          await changePass(e, toast, passwordData);
+          await changePass(e, passwordData);
           setPasswordData({ oldPassword: "", newPassword: "" });
         }}
       >

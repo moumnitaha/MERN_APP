@@ -1,8 +1,10 @@
 const User = require("../models/User");
 
 exports.users = async (req, res) => {
+  const { me } = req.query;
+  console.log("me", typeof me);
   const users = await User.find({
-    _id: { $ne: req.user.userId },
+    _id: { $ne: me && me === "false" ? req.user.userId : null },
   });
   const newUsers = users.map((user) => {
     return {

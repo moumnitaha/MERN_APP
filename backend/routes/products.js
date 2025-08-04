@@ -154,9 +154,12 @@ const products = async (req, res) => {
     //     await product.save();
     //   }
     // }
-    res.send(products);
+    res.status(200).send(products);
   } catch (error) {
     console.log(error);
+    res.status(500).send({
+      error: "Error fetching products",
+    });
   }
 };
 

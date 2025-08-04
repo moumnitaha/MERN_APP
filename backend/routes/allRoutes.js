@@ -10,6 +10,7 @@ const { refresh } = require("./refresh");
 const { friendship } = require("../controllers/friendship.js");
 const { upload_avatar } = require("./uploadAvatar");
 const products = require("./products");
+const categories = require("./categories");
 const { addProduct } = require("./addProduct");
 const { updateProduct } = require("./updateProduct");
 const { deleteProduct } = require("./deleteProduct");
@@ -27,6 +28,8 @@ const {
 } = require("../middleware/authMiddleware");
 
 const { productValidator } = require("../middleware/productMiddleware.js");
+const { deleteOrder } = require("./deleteOrder.js");
+
 router.get("/", (req, res) => {
   res.status(200).send({ message: "Welcome to the backend" });
 });
@@ -40,10 +43,12 @@ router.get("/me", authenticateToken, me);
 router.post("/addFriend", authenticateToken, friendship);
 router.get("/users", authenticateToken, users);
 router.get("/products", authenticateToken, products);
+router.get("/categories", authenticateToken, categories);
 router.post("/addProduct", authenticateToken, productValidator, addProduct);
 router.put("/changePass", authenticateToken, changePassValidator, changePass);
 router.get("/orders", authenticateToken, getOrders);
 router.post("/addOrder", authenticateToken, addOrder);
+router.delete("/deleteOrder", authenticateToken, deleteOrder);
 router.put(
   "/updateInfos",
   authenticateToken,
@@ -64,7 +69,7 @@ router.put(
 );
 router.use(
   "/uploads",
-  authenticateToken,
+  //   authenticateToken,
   express.static(path.join(__dirname, "../uploads"))
 );
 

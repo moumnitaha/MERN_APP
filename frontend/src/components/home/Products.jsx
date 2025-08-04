@@ -74,6 +74,39 @@ function Products() {
         />
       </div>
       <div className="overflow-x-auto">
+        {["Clothes", "Electronics", "Furniture", "Shoes", "Miscellaneous"].map(
+          (category) => (
+            <button
+              key={category}
+              className="bg-blue-500 text-white font-semibold rounded-lg p-2 m-2 w-32"
+              onClick={async () => {
+                const response = await api.get(
+                  `/products?category=${category}`
+                );
+                if (response.status === 200) {
+                  setProducts(response.data);
+                } else {
+                  console.error("Error retrieving products");
+                }
+              }}
+            >
+              {category}
+            </button>
+          )
+        )}
+        <button
+          className="bg-blue-500 text-white font-semibold rounded-lg p-2 m-2"
+          onClick={async () => {
+            const response = await api.get(`/products`);
+            if (response.status === 200) {
+              setProducts(response.data);
+            } else {
+              console.error("Error retrieving products");
+            }
+          }}
+        >
+          All
+        </button>
         <table className="max-w-full bg-white border border-slate-200 rounded-lg shadow-sm m-5">
           <thead className="bg-slate-200 select-none">
             <tr>
@@ -233,7 +266,8 @@ function Products() {
                     <img
                       className="min-w-14 min-h-14 max-h-16 max-w-16 aspect-square object-cover rounded-md border border-slate-200 hover:scale-150 transition-transform hover:border-blue-400"
                       src={
-                        product.images[0] || "https://via.placeholder.com/300"
+                        `http://localhost:3000${product.images[0]}` ||
+                        "https://via.placeholder.com/300"
                       }
                       alt={product.title}
                       loading="lazy"

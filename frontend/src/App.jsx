@@ -15,12 +15,25 @@ import "react-toastify/dist/ReactToastify.css";
 import Settings from "./components/home/Settings.jsx";
 import Orders from "./components/home/Orders.jsx";
 import AddOrder from "./components/home/addOrder.jsx";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
     <Router>
       <AuthProvider>
         <NavBar />
+        <ToastContainer
+          theme="dark"
+          position="top-right"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss={false}
+          draggable
+          pauseOnHover
+        />
         <Routes>
           <Route path="/" element={<Landing />} index={true} />
           <Route path="/login" element={<Login />} />

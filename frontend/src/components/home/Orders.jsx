@@ -11,7 +11,7 @@ function Orders() {
     const getOrders = async () => {
       try {
         const response = await api.get("/orders");
-        console.log(response.data[7]);
+        console.log(response.data);
         setOrders(response.data);
       } catch (error) {
         console.error(error?.response?.data);
@@ -28,6 +28,7 @@ function Orders() {
       <table className="w-full">
         <thead>
           <tr>
+            <th className="p-4 text-left">Action</th>
             <th className="p-4 text-left">Order ID</th>
             <th className="p-4 text-left">Products</th>
             <th className="p-4 text-left">Quantity</th>
@@ -40,6 +41,14 @@ function Orders() {
         <tbody>
           {orders.map((order) => (
             <tr key={order._id}>
+              <td className="p-4">
+                <button
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={async () => {}}
+                >
+                  Delete
+                </button>
+              </td>
               <td className="p-4">{order._id}</td>
               <td className="p-4">
                 {order.products.map((product) => (
@@ -47,7 +56,7 @@ function Orders() {
                     <span className="p-4">
                       <Link to={`/product/${product._id}`}>
                         <img
-                          src={product.images[0]}
+                          src={`http://localhost:3000${product.images[0]}`}
                           alt={product.name}
                           className="h-8 w-8 inline-block mr-4"
                         />

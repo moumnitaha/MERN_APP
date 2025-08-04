@@ -36,12 +36,12 @@ exports.upload_avatar = async (req, res) => {
     await User.findByIdAndUpdate(
       req.user.userId,
       {
-        avatar: `http://localhost:3000/uploads/avatars/${req.user.userId}/${fileName}`,
+        avatar: `/uploads/avatars/${req.user.userId}/${fileName}`,
       },
       { new: true }
     );
     return res.status(200).send({
-      newAvatar: `http://localhost:3000/uploads/avatars/${req.user.userId}/${fileName}`,
+      newAvatar: `/uploads/avatars/${req.user.userId}/${fileName}`,
     });
   } catch (error) {
     console.log(colors.red("Error uploading avatar: ", error));

@@ -16,7 +16,7 @@ colors.enable();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "http://10.30.243.161:*"],
     credentials: true,
   })
 );

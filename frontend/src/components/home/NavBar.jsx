@@ -59,7 +59,7 @@ function NavBar() {
     <nav className="flex flex-col items-center justify-start w-60 bg-slate-100 p-4 h-svh fixed z-40 text-gray-900 top-0 left-0">
       <div className="w-full h-24 flex flex-row justify-between items-center">
         <img
-          src={user.avatar}
+          src={`http://localhost:3000${user.avatar}`}
           alt="avatar"
           className="w-12 h-12 rounded-full"
         />

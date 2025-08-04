@@ -15,7 +15,7 @@ exports.sendVerificationEmail = (email, token) => {
     from: "Express Auth",
     to: email,
     subject: "Email verification",
-    text: `Please click the following link to verify your email: http://localhost:3000/verify?token=${token}`,
+    html: `Please click the following link to verify your email: <a href="http://localhost:3000/verify?token=${token}">Click here</a>`,
   };
   transporter.sendMail(mailOptions, (err, data) => {
     if (err) {

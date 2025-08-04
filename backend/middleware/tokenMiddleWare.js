@@ -6,10 +6,13 @@ const authenticateToken = async (req, res, next) => {
   const requestPath = req.path;
   const accessToken = req.cookies.accessToken || req.body?.accessToken;
   const refreshToken = req.cookies.refreshToken || req.body?.refreshToken;
+  const path = req.path;
+  const originalUrl = req.originalUrl;
   if (accessToken == null || refreshToken == null) {
     console.log(
       colors.red("Access denied from middleware for:"),
-      colors.cyan(requestPath)
+      colors.cyan(requestPath),
+      colors.yellow("Original URL:")
     );
     return res.status(401).send({ error: "Access denied from middleware" });
   }
@@ -75,6 +78,10 @@ const authenticateToken = async (req, res, next) => {
       );
       return res.status(403).send({ error: "Invalid token from middleware" });
     }
+    console.log(
+      colors.green("User Authorized for: "),
+      colors.magenta(requestPath)
+    );
     req.user = user;
     next();
   });
