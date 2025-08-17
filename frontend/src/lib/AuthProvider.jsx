@@ -1,8 +1,8 @@
-import React, { createContext, useEffect, useState } from "react";
-import createApiInstance from "../interceptors/interceptor";
-import Loading from "../components/Loading";
-import { useLocation, useNavigate } from "react-router-dom";
+import { createContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Loading from "../components/Loading";
+import createApiInstance from "../interceptors/interceptor";
 
 const api = createApiInstance();
 
@@ -20,7 +20,6 @@ export default function AuthProvider({ children }) {
   const [loading, setLoding] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
     const authMount = async () => {
@@ -55,7 +54,7 @@ export default function AuthProvider({ children }) {
     authMount();
   }, [navigate]);
 
-  async function handleLogin(e, formData, toast) {
+  async function handleLogin(e, formData) {
     e.preventDefault();
     try {
       const response = await api.post("/login", formData);
@@ -68,8 +67,8 @@ export default function AuthProvider({ children }) {
         toast.error(response.statusText);
       }
     } catch (error) {
-      console.error("Error:", error);
-      toast.error(error.response.data);
+      console.error("Login Error:", error);
+      toast.error(error.response.data.error);
     }
   }
 
@@ -140,7 +139,7 @@ export default function AuthProvider({ children }) {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response.data);
+      toast.error(error.response.data.error);
     }
   };
 

@@ -1,12 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-.description-ellipsis {
-  display: -webkit-box;
-  -webkit-line-clamp: 2; /* Limit to 4 lines */
-  line-clamp: 2; /* Limit to 4 lines */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-height: 6rem; /* Adjust based on the font size and line height */
+@import "tailwindcss";
+button {
+  cursor: pointer;
 }

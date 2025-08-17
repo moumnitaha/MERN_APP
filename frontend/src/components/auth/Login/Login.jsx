@@ -1,7 +1,6 @@
-import React, { useContext, useEffect } from "react";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import { AuthContext } from "../../../lib/AuthProvider.jsx";
 
 function Login() {
@@ -54,7 +53,7 @@ function Login() {
         <h2 className="text-2xl font-bold mb-6 text-gray-900 text-center">
           Login
         </h2>
-        <form onSubmit={(e) => handleLogin(e, formData, toast)}>
+        <form onSubmit={(e) => handleLogin(e, formData)}>
           <div className="mb-4">
             <label
               htmlFor="email"
