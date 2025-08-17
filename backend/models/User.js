@@ -52,46 +52,21 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-//edit deleteOne() method to update updatedAt
-userSchema.pre("deleteOne", function (next) {
-  let friends = this.friends;
-  friends.forEach(async (friend) => {
-    await User.findByIdAndUpdate(friend, {
-      $pull: { friends: this._id },
-    });
-  });
+// Helper to remove user from friends' lists
+const removeFromFriends = async function (next) {
+  if (this.friends && this.friends.length) {
+    for (const friend of this.friends) {
+      await this.model.findByIdAndUpdate(friend, {
+        $pull: { friends: this._id },
+      });
+    }
+  }
   next();
-});
+};
 
-// all other delete methods
-userSchema.pre("deleteMany", function (next) {
-  let friends = this.friends;
-  friends.forEach(async (friend) => {
-    await User.findByIdAndUpdate(friend, {
-      $pull: { friends: this._id },
-    });
-  });
-  next();
-});
-
-userSchema.pre("findOneAndDelete", function (next) {
-  let friends = this.friends;
-  friends.forEach(async (friend) => {
-    await User.findByIdAndUpdate(friend, {
-      $pull: { friends: this._id },
-    });
-  });
-  next();
-});
-
-userSchema.pre("findByIdAndDelete", function (next) {
-  let friends = this.friends;
-  friends.forEach(async (friend) => {
-    await User.findByIdAndUpdate(friend, {
-      $pull: { friends: this._id },
-    });
-  });
-  next();
-});
+userSchema.pre("deleteOne", removeFromFriends);
+userSchema.pre("deleteMany", removeFromFriends);
+userSchema.pre("findOneAndDelete", removeFromFriends);
+userSchema.pre("findByIdAndDelete", removeFromFriends);
 
 module.exports = mongoose.model("User", userSchema);

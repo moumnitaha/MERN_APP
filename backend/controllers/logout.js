@@ -4,19 +4,23 @@ const BlacklistedToken = require("../models/BlacklistedTokens");
 
 exports.logout = async (req, res) => {
   try {
-    const blacklistedToken = new BlacklistedToken({
-      token: req.cookies.accessToken,
-      type: "refresh",
-    });
-    await blacklistedToken.save();
-    console.log(colors.green("Token blacklisted successfully"));
+    // Blacklist both access and refresh tokens if present
+    if (req.cookies.accessToken) {
+      await new BlacklistedToken({
+        token: req.cookies.accessToken,
+        type: "access",
+      }).save();
+    }
+    if (req.cookies.refreshToken) {
+      await new BlacklistedToken({
+        token: req.cookies.refreshToken,
+        type: "refresh",
+      }).save();
+    }
   } catch (err) {
-    console.log(err);
-    console.log(colors.red("Error blacklisting token"));
     return res.status(500).send({ error: "Error blacklisting token" });
   }
   res.clearCookie("accessToken");
   res.clearCookie("refreshToken");
-  console.log(colors.green("Logged out successfully"));
   res.status(200).send({ res: "Logged out successfully" });
 };

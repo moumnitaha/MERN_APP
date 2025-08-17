@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-exports.sendVerificationEmail = (email, token) => {
+exports.sendVerificationEmail = async (email, token) => {
   const transporter = nodemailer.createTransport({
     service: "Gmail",
     host: "smtp.gmail.com",
@@ -11,18 +11,18 @@ exports.sendVerificationEmail = (email, token) => {
       pass: process.env.GMAIL_APP_PASSWORD,
     },
   });
-  let mailOptions = {
+  const backendUrl = process.env.BACKEND_URL || "http://localhost:3000";
+  const mailOptions = {
     from: "Express Auth",
     to: email,
     subject: "Email verification",
-    html: `Please click the following link to verify your email: <a href="http://localhost:3000/verify?token=${token}">Click here</a>`,
+    html: `Please click the following link to verify your email: <a href="${backendUrl}/verify?token=${token}">Click here</a>`,
   };
-  transporter.sendMail(mailOptions, (err, data) => {
-    if (err) {
-      console.log("Error occurred: ", err);
-      throw new Error("Error sending email");
-    } else {
-      console.log("Email sent successfully: ", data.response);
-    }
-  });
+  try {
+    const data = await transporter.sendMail(mailOptions);
+    console.log("Email sent successfully: ", data.response);
+  } catch (err) {
+    console.log("Error occurred: ", err);
+    throw new Error("Error sending email");
+  }
 };

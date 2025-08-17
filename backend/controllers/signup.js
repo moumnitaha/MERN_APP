@@ -4,6 +4,10 @@ const colors = require("colors");
 const User = require("../models/User.js");
 const { sendVerificationEmail } = require("./sendVerificationEmail.js");
 
+// Helper to create JWT
+const createToken = (payload, secret, expiresIn) =>
+  jwt.sign(payload, secret, { expiresIn });
+
 exports.signup = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
   try {
@@ -22,40 +26,28 @@ exports.signup = async (req, res) => {
       password: hashedPassword,
       avatar: `/uploads/avatars/noUser.png`,
     });
-    const emailToken = jwt.sign(
+    const emailToken = createToken(
       { userId: user._id, type: "email", email },
       process.env.EMAIL_TOKEN_SECRET,
-      {
-        expiresIn: "1d",
-      }
+      "1d"
     );
     user.verificationToken = emailToken;
     try {
-      sendVerificationEmail(email, emailToken);
+      await sendVerificationEmail(email, emailToken);
     } catch (err) {
-      console.log(err);
       return res
         .status(500)
         .send({ error: "Error sending verification email" });
     }
-    const refreshToken = jwt.sign(
+    const refreshToken = createToken(
       { userId: user._id, type: "refresh" },
       process.env.REFRESH_TOKEN_SECRET,
-      {
-        expiresIn: "7d",
-      }
+      "7d"
     );
     user.refreshToken = refreshToken;
     await user.save();
-    // res.cookie("refreshToken", refreshToken, {
-    //   httpOnly: true,
-    //   secure: false,
-    //   sameSite: "Strict",
-    // });
-    console.log(colors.green("User created successfully"));
     res.status(201).send("User created successfully");
   } catch (err) {
-    console.log(err);
-    res.status(500).send({ error: `Error creating user: ${err.errmsg}` });
+    res.status(500).send({ error: `Error creating user: ${err.message}` });
   }
 };
