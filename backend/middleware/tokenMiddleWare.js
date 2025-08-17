@@ -2,84 +2,88 @@ const jwt = require("jsonwebtoken");
 const colors = require("colors");
 const BlacklistedToken = require("../models/BlacklistedTokens");
 
+// Helper: Check if refresh token is blacklisted
+const isTokenBlacklisted = async (token) => {
+  return await BlacklistedToken.findOne({ token });
+};
+
+// Helper: Verify a JWT token
+const verifyToken = (token, secret) => {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, secret, (err, decoded) => {
+      if (err) return reject(err);
+      resolve(decoded);
+    });
+  });
+};
+
+// Helper: Blacklist a token
+const blacklistToken = async (token, type = "refresh") => {
+  const blackedToken = new BlacklistedToken({ token, type });
+  await blackedToken.save();
+};
+
+// Main middleware
 const authenticateToken = async (req, res, next) => {
-  const requestPath = req.path;
   const accessToken = req.cookies.accessToken || req.body?.accessToken;
   const refreshToken = req.cookies.refreshToken || req.body?.refreshToken;
-  const path = req.path;
-  const originalUrl = req.originalUrl;
-  if (accessToken == null || refreshToken == null) {
-    console.log(
-      colors.red("Access denied from middleware for:"),
-      colors.cyan(requestPath),
-      colors.yellow("Original URL:")
-    );
-    return res.status(401).send({ error: "Access denied from middleware" });
+  const requestPath = req.path;
+
+  if (!accessToken || !refreshToken) {
+    console.log(colors.red("Access denied for:"), colors.cyan(requestPath));
+    return res.status(401).send({ error: "Access denied" });
   }
+
   try {
-    const blacklistedToken = await BlacklistedToken.findOne({
-      token: refreshToken,
-    });
-    if (blacklistedToken) {
-      //   res.clearCookie("refreshToken");
+    // Check if refresh token is blacklisted
+    if (await isTokenBlacklisted(refreshToken)) {
       console.log(
-        colors.red("Already blacklisted token from middleware for:"),
+        colors.red("Blacklisted refresh token for:"),
         colors.cyan(requestPath)
       );
-      return res
-        .status(403)
-        .send({ error: "Blacklisted token from middleware" });
+      return res.status(403).send({ error: "Blacklisted refresh token" });
     }
+
+    // Verify refresh token
     try {
-      jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+      await verifyToken(refreshToken, process.env.REFRESH_TOKEN_SECRET);
     } catch (error) {
-      //   res.clearCookie("refreshToken");
       if (error.name === "TokenExpiredError") {
-        let blackedToken = new BlacklistedToken({
-          token: refreshToken,
-          type: "refresh",
-        });
-        await blackedToken.save();
+        await blacklistToken(refreshToken, "refresh");
         console.log(
-          colors.red("Refresh token expired from middleware for:"),
+          colors.red("Refresh token expired for:"),
           colors.cyan(requestPath)
         );
-        return res
-          .status(401)
-          .send({ error: "Refresh token expired from middleware" });
+        return res.status(401).send({ error: "Refresh token expired" });
       }
-      return res
-        .status(403)
-        .send({ error: "Invalid refresh token from middleware" });
+      return res.status(403).send({ error: "Invalid refresh token" });
     }
   } catch (err) {
     console.log(
-      colors.red("Error checking blacklisted token from middleware for:"),
+      colors.red("Error checking blacklisted token for:"),
       colors.cyan(requestPath)
     );
-    return res
-      .status(500)
-      .send({ error: "Error checking blacklisted token from middleware" });
+    return res.status(500).send({ error: "Internal server error" });
   }
+
+  // Verify access token
   jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) {
       if (err.name === "TokenExpiredError") {
         console.log(
-          colors.red("Access Token expired from middleware for:"),
+          colors.red("Access token expired for:"),
           colors.cyan(requestPath)
         );
-        return res
-          .status(401)
-          .send({ error: "Access Token expired from middleware" });
+        return res.status(401).send({ error: "Access token expired" });
       }
       console.log(
-        colors.red("Invalid token from middleware for:"),
+        colors.red("Invalid access token for:"),
         colors.cyan(requestPath)
       );
-      return res.status(403).send({ error: "Invalid token from middleware" });
+      return res.status(403).send({ error: "Invalid access token" });
     }
     console.log(
-      colors.green("User Authorized for: "),
+      colors.green("User authorized for:"),
       colors.magenta(requestPath)
     );
     req.user = user;

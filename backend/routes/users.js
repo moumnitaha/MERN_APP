@@ -7,6 +7,5 @@ exports.users = async (req, res) => {
   }).select(
     "_id firstName lastName email avatar createdAt updatedAt friends cart"
   );
-  console.log(users);
   res.send(users);
 };

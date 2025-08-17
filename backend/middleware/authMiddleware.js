@@ -64,10 +64,3 @@ const changePassValidator = (req, res, next) => {
   }
   next();
 };
-
-module.exports = {
-  signupValidator,
-  loginValidator,
-  updateInfosValidator,
-  changePassValidator,
-};

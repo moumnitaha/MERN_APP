@@ -1,13 +1,27 @@
 const express = require("express");
+const path = require("path");
 const router = express.Router();
+
+// Middleware
+const authenticateToken = require("../middleware/tokenMiddleWare");
+
+const loginValidator = require("../validators/loginValidator");
+const signupValidator = require("../validators/signupValidator");
+const updateInfosValidator = require("../validators/updateInfosValidator");
+const changePassValidator = require("../validators/changePassValidator");
+const { productValidator } = require("../middleware/productMiddleware.js");
+
+// Controllers
 const { login } = require("../controllers/login.js");
 const { signup } = require("../controllers/signup.js");
 const { logout } = require("../controllers/logout.js");
 const { verify } = require("../controllers/verifyEmail.js");
+const { friendship } = require("../controllers/friendship.js");
+
+// Route Handlers
 const { updateInfos } = require("./updateInfos.js");
 const { changePass } = require("./changePass.js");
 const { refresh } = require("./refresh");
-const { friendship } = require("../controllers/friendship.js");
 const { upload_avatar } = require("./uploadAvatar");
 const products = require("./products");
 const categories = require("./categories");
@@ -18,21 +32,12 @@ const { getOrders } = require("./getOrders");
 const { addOrder } = require("./addOrder");
 const { me } = require("./me");
 const { users } = require("./users");
-const authenticateToken = require("../middleware/tokenMiddleWare");
-const path = require("path");
-const {
-  loginValidator,
-  signupValidator,
-  updateInfosValidator,
-  changePassValidator,
-} = require("../middleware/authMiddleware");
-
-const { productValidator } = require("../middleware/productMiddleware.js");
 const { deleteOrder } = require("./deleteOrder.js");
 
-router.get("/", (req, res) => {
-  res.status(200).send({ message: "Welcome to the backend" });
-});
+// Routes
+router.get("/", (req, res) =>
+  res.status(200).send({ message: "Welcome to the backend" })
+);
 router.post("/login", loginValidator, login);
 router.post("/signup", signupValidator, signup);
 router.get("/verify", verify);
@@ -67,10 +72,8 @@ router.put(
   productValidator,
   updateProduct
 );
-router.use(
-  "/uploads",
-  //   authenticateToken,
-  express.static(path.join(__dirname, "../uploads"))
-);
+
+// Static uploads
+router.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 module.exports = router;
