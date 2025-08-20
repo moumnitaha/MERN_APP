@@ -5,7 +5,8 @@ const mongoose = require("./configs/dbConfig");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const colors = require("colors");
-const allRoutes = require("./routes/allRoutes");
+// Modular routes (NestJS-style structure)
+const allRoutes = require("./allRoutes.js");
 const bodyParser = require("body-parser");
 
 require("dotenv").config();

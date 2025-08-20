@@ -109,15 +109,11 @@ export default function AuthProvider({ children }) {
         toast.success("Password changed successfully");
       } else {
         let data = response.data;
-        console.error(
-          "Error changing password: ",
-          response.status,
-          data.message
-        );
+        console.error("Error changing password: ", data);
         toast.error(data.message);
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error => :", error);
       toast.error(error.response.data.error);
     }
   };
@@ -138,7 +134,7 @@ export default function AuthProvider({ children }) {
         toast.error(data.message);
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error => :", error);
       toast.error(error.response.data.error);
     }
   };

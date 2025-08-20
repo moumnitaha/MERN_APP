@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import createApiInstance from "../../interceptors/interceptor.js";
 import { AuthContext } from "../../lib/AuthProvider.jsx";
-import { ToastContainer, toast } from "react-toastify";
 
 const api = createApiInstance();
 
@@ -74,7 +73,7 @@ function Home() {
             </div>
             <div className="flex flex-col items-start justify-start">
               <h2 className="text-2xl font-bold mb-1 text-white text-center">
-                {user.name}
+                {user.firstName + " " + user.lastName}
               </h2>
               <p className="text-lg font-medium mb-1 text-white text-center">
                 Email: {user.email}
@@ -82,21 +81,6 @@ function Home() {
               <p className="text-lg font-medium mb-1 text-white text-center">
                 Created At: {new Date(user.createdAt).toLocaleString("en-US")}
               </p>
-              {!user.isFriend ? (
-                <button
-                  className="w-48 p-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 text-center"
-                  onClick={() => sendFriendRequest(user._id, setUsers)}
-                >
-                  ADD FRIEND
-                </button>
-              ) : (
-                <button
-                  className="w-48 p-3 bg-gray-500 text-white rounded-lg font-medium hover:bg-gray-600 text-center"
-                  disabled
-                >
-                  ALREADY FRIEND
-                </button>
-              )}
             </div>
           </div>
         ))}

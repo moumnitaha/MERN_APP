@@ -1,4 +1,4 @@
-const Product = require("../models/Product");
+const Product = require("../modelsdd/Product");
 const fs = require("fs");
 const request = require("request");
 const path = require("path");

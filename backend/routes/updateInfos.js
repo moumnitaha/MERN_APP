@@ -1,4 +1,4 @@
-const User = require("../models/User");
+const User = require("../modules/users/user.model");
 
 exports.updateInfos = async (req, res) => {
   const { firstName, lastName } = req.body;

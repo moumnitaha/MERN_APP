@@ -1,4 +1,4 @@
-const User = require("../models/User");
+const User = require("../modules/users/user.model");
 const bcrypt = require("bcrypt");
 
 exports.changePass = async (req, res) => {

@@ -1,4 +1,4 @@
-const Order = require("../models/Order");
+const Order = require("../modelsdd/Order");
 
 exports.deleteOrder = async (req, res) => {
   const orderId = req.body.id;
