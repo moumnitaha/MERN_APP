@@ -1,8 +1,8 @@
-import React, { useContext, useState } from "react";
-import { ToastContainer } from "react-toastify";
-import { AuthContext } from "../../lib/AuthProvider";
 import { Cog6ToothIcon } from "@heroicons/react/20/solid";
+import { useContext, useState } from "react";
+import { ToastContainer } from "react-toastify";
 import createApiInstance from "../../interceptors/interceptor";
+import { AuthContext } from "../../lib/AuthProvider";
 
 const api = createApiInstance();
 
@@ -17,7 +17,8 @@ function Settings() {
     oldPassword: "",
     newPassword: "",
   });
-  const [img, setImg] = useState("");
+  const [imgFile, setImgFile] = useState(null);
+  const [imgPreview, setImgPreview] = useState("");
   const handlePasswordChange = (e) => {
     setPasswordData({ ...passwordData, [e.target.id]: e.target.value });
   };
@@ -55,26 +56,32 @@ function Settings() {
       <form
         className="flex flex-col ml-3"
         onSubmit={(e) => {
-          handleImageChange(e, img, setImg);
-          setImg("");
+          handleImageChange(e, imgFile);
+          setImgFile(null);
+          setImgPreview("");
         }}
       >
         <label
           htmlFor="upload"
           className="flex flex-col items-center justify-center gap-2 cursor-pointer max-w-48 h-48 aspect-square mb-5 relative p-1 border-2 border-dashed border-gray-300 rounded-md"
         >
-          {img ? (
+          {imgPreview ? (
             <div className="w-44 h-44 bg-red-200 flex justify-center items-center relative">
               <div
                 className="absolute bg-red-600 rounded-full -top-2 -left-2 w-8 h-8 flex justify-center items-center text-white font-bold cursor-pointer"
                 onClick={(e) => {
                   e.preventDefault();
-                  setImg("");
+                  setImgFile(null);
+                  setImgPreview("");
                 }}
               >
                 <span className="m-auto text-2xl">×</span>
               </div>
-              <img src={img} className="w-44 h-44 rounded-md" alt="avatar" />
+              <img
+                src={imgPreview}
+                className="w-44 h-44 rounded-md"
+                alt="avatar"
+              />
             </div>
           ) : (
             <>
@@ -99,21 +106,23 @@ function Settings() {
         </label>
         <input
           id="upload"
-          name="images"
+          name="avatar"
           type="file"
           accept="image/png, image/jpeg, image/jpg"
           className="hidden"
           onChange={(e) => {
             let file = e.target.files[0];
-            let reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => {
-              setImg(reader.result);
-            };
+            if (file) {
+              setImgFile(file);
+              setImgPreview(URL.createObjectURL(file));
+            } else {
+              setImgFile(null);
+              setImgPreview("");
+            }
           }}
         />
         <button
-          disabled={!img}
+          disabled={!imgFile}
           className="w-48 p-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 disabled:bg-gray-400"
           type="submit"
         >

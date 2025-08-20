@@ -33,28 +33,8 @@ async function changePassword(userId, oldPassword, newPassword) {
   return { message: "Password changed successfully" };
 }
 
-async function uploadAvatar(userId, avatar) {
-  if (!avatar) throw new Error("No avatar provided");
+async function uploadAvatar(userId, fileName) {
   try {
-    const base64Data = avatar.replace(
-      /^data:image\/(png|jpg|jpeg);base64,/,
-      ""
-    );
-    const imageType = avatar.match(/^data:image\/(png|jpg|jpeg);base64,/)[1];
-    const fileName = `${userId}_${Date.now()}_avatar.${imageType}`;
-    const avatarsFolder = path.join(__dirname, "../../uploads/avatars");
-    const avatarPath = path.join(avatarsFolder, userId.toString());
-    const filePath = path.join(avatarPath, fileName);
-    if (!fs.existsSync(avatarPath)) {
-      fs.mkdirSync(avatarPath, { recursive: true });
-    }
-    //delete previous avatars
-    fs.readdirSync(avatarPath).forEach((file) => {
-      if (file.includes(userId)) {
-        fs.unlinkSync(path.join(avatarPath, file));
-      }
-    });
-    fs.writeFileSync(filePath, base64Data, "base64");
     await User.findByIdAndUpdate(
       userId,
       {

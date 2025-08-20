@@ -1,14 +1,16 @@
+const userService = require("./user.service");
+
 exports.uploadAvatar = async (req, res) => {
-  const avatar = req.body.avatar;
   try {
-    const result = await userService.uploadAvatar(req.user.userId, avatar);
+    const result = await userService.uploadAvatar(
+      req.user.userId,
+      req.newFileName
+    );
     return res.status(200).send(result);
   } catch (error) {
     return res.status(500).send(error.message || "Error uploading avatar");
   }
 };
-
-const userService = require("./user.service");
 
 exports.getUsers = async (req, res) => {
   const { me } = req.query;

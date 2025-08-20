@@ -57,7 +57,7 @@ export default function AuthProvider({ children }) {
   async function handleLogin(e, formData) {
     e.preventDefault();
     try {
-      const response = await api.post("/login", formData);
+      const response = await api.post("/auth/login", formData);
       if (response.status === 200) {
         console.log("User logged in successfully");
         setUser(response.data);
@@ -74,7 +74,7 @@ export default function AuthProvider({ children }) {
 
   async function handleLogout() {
     try {
-      const response = await api.post("/logout");
+      const response = await api.post("/auth/logout");
       if (response.status === 200) {
         console.log("User logged out successfully");
         setUser(null);
@@ -88,23 +88,32 @@ export default function AuthProvider({ children }) {
     }
   }
 
-  const handleImageChange = async (e, img) => {
+  const handleImageChange = async (e, imgFile) => {
     e.preventDefault();
-    const response = await api.post("/upload_avatar", {
-      avatar: img,
-    });
-    if (response.status === 200) {
-      toast.success("Avatar uploaded successfully");
-      setUser({ ...user, avatar: response.data.newAvatar });
-    } else {
-      toast.error("Error uploading avatar");
+    const formData = new FormData();
+    formData.append("avatar", imgFile); // Only append with the key 'avatar'
+    try {
+      const response = await api.post("/users/upload_avatar", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (response.status === 200) {
+        toast.success("Avatar uploaded successfully");
+        setUser({ ...user, avatar: response.data.newAvatar });
+      } else {
+        toast.error("Error uploading avatar");
+      }
+    } catch (error) {
+      console.error("Error => :", error);
+      toast.error(error.response.data || "Error uploading avatar");
     }
   };
 
   const changePass = async (e, passData) => {
     e.preventDefault();
     try {
-      const response = await api.put("/changePass", passData);
+      const response = await api.put("/users/changePass", passData);
       if (response.status === 201) {
         toast.success("Password changed successfully");
       } else {
@@ -121,10 +130,7 @@ export default function AuthProvider({ children }) {
   const updateInfos = async (e, formData) => {
     e.preventDefault();
     try {
-      const response = await api.put(
-        "http://localhost:3000/updateInfos",
-        formData
-      );
+      const response = await api.put("/users/updateInfos", formData);
       if (response.status === 201) {
         toast.success("User updated successfully");
         setUser(response.data);

@@ -124,6 +124,7 @@ async function refreshTokenService(req, res) {
       secure: false,
       sameSite: "Strict",
     });
+    console.log(colors.green("Token refreshed successfully"));
     res
       .status(200)
       .send({ message: "Token refreshed successfully", token: accessToken });

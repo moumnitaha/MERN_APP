@@ -11,9 +11,7 @@ exports.getProducts = async (req, res) => {
 
 exports.addProduct = async (req, res) => {
   try {
-    // req.body fields are plain text, req.files is an array of uploaded files
-    const productData = JSON.parse(req.body.product);
-    const result = await productService.addProduct(productData, req.files);
+    const result = await productService.addProduct(req.body.product);
     res.send(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
